@@ -1,5 +1,8 @@
 # qwenmem-spine
 
+**Model weights:** [Jared1728/qwenmem-spine on Hugging Face](https://huggingface.co/Jared1728/qwenmem-spine).
+See the [pinned download and setup instructions](docs/reproduction.md#merged-checkpoint-download-or-build).
+
 An experimental memory system that combines Rust Spine's durable memory and
 agent tools with a modified Qwen3.5-4B language model. Five added model layers
 execute a small navigation program over a hierarchy of memory records.
