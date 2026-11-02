@@ -1,0 +1,286 @@
+use std::collections::BTreeMap;
+
+use spine_heart::{
+    ContextForest, ContextHandle, ContextLeaf, Dcmdb, DcmdbConfig, Embedding, EventId,
+    MemoryObservation, RehydrateBudget,
+};
+
+fn add(memory: &mut Dcmdb, byte: u8, vector: [f32; 3], time: f64) -> spine_heart::NodeId {
+    memory
+        .update(MemoryObservation {
+            event_id: EventId::from_bytes([byte; 32]),
+            vector: vector.to_vec(),
+            time,
+            source: None,
+            metadata: BTreeMap::new(),
+        })
+        .unwrap()
+}
+
+#[test]
+fn compaction_folds_only_pairs_with_a_real_coherent_apex() {
+    let mut config = DcmdbConfig::dense(3);
+    config.theta_similarity = 0.9999;
+    config.tension_promote_count = 99;
+    config.prune_weight_threshold = 2.0;
+    let mut memory = Dcmdb::new(config).unwrap();
+    let a = add(&mut memory, 1, [1.0, 0.0, 0.0], 1.0);
+    let b = add(&mut memory, 2, [0.99, 0.1, 0.0], 2.0);
+    let c = add(&mut memory, 3, [0.0, 1.0, 0.0], 3.0);
+    assert_ne!(a, b);
+    assert!(memory.coherent_apex(a, b, 0.8).is_some());
+
+    let mut forest = ContextForest::default();
+    let roots = forest
+        .compact(
+            [
+                ContextLeaf {
+                    node_id: a,
+                    chronology: 1,
+                },
+                ContextLeaf {
+                    node_id: b,
+                    chronology: 2,
+                },
+                ContextLeaf {
+                    node_id: c,
+                    chronology: 3,
+                },
+            ],
+            &memory,
+            1,
+        )
+        .unwrap();
+
+    // A and B fold. C stays separate because no real DCMDb coordinate is
+    // coherent with both clusters; no scaffold node is manufactured.
+    assert_eq!(roots.len(), 2);
+    assert_eq!(forest.triangles.len(), 1);
+    let triangle = forest.triangles.values().next().unwrap();
+    assert!(memory.node(triangle.apex).is_some());
+    assert!(triangle.apex == a || triangle.apex == b);
+    assert_eq!(memory.nodes.len(), 3);
+    forest.verify(&memory).unwrap();
+
+    let disposable = add(&mut memory, 4, [0.0, 0.0, 1.0], 4.0);
+    let referenced = forest.referenced_nodes();
+    assert_eq!(referenced, [a, b, c].into_iter().collect());
+    assert_eq!(memory.prune_pass_protected(4.0, &referenced), 1);
+    assert!(memory.node(disposable).is_none());
+    forest.verify(&memory).unwrap();
+}
+
+#[test]
+fn rehydration_reads_apex_and_preferred_path_but_keeps_alternate_route() {
+    let mut config = DcmdbConfig::dense(3);
+    config.theta_similarity = 0.9999;
+    let mut memory = Dcmdb::new(config).unwrap();
+    let a = add(&mut memory, 1, [1.0, 0.0, 0.0], 1.0);
+    let b = add(&mut memory, 2, [0.99, 0.1, 0.0], 2.0);
+    let mut forest = ContextForest::default();
+    forest
+        .compact(
+            [
+                ContextLeaf {
+                    node_id: a,
+                    chronology: 1,
+                },
+                ContextLeaf {
+                    node_id: b,
+                    chronology: 2,
+                },
+            ],
+            &memory,
+            1,
+        )
+        .unwrap();
+    let root = forest.roots[0].handle;
+    assert!(matches!(root, ContextHandle::Triangle(_)));
+    let query = Embedding::normalized(vec![0.99, 0.1, 0.0], 3).unwrap();
+    let result = forest
+        .rehydrate(
+            root,
+            Some(&query),
+            &memory,
+            RehydrateBudget {
+                max_depth: 4,
+                max_fanout: 2,
+                max_nodes: 4,
+                max_tokens: 4,
+            },
+        )
+        .unwrap();
+    assert!(!result.coordinates.is_empty());
+    assert_eq!(result.alternate_routes.len(), 1);
+    assert!(
+        result
+            .coordinates
+            .iter()
+            .all(|coordinate| memory.node(coordinate.node_id).is_some())
+    );
+}
+
+#[test]
+fn duplicate_node_handles_coalesce_without_self_referential_triangles() {
+    let mut memory = Dcmdb::new(DcmdbConfig::dense(3)).unwrap();
+    let first = add(&mut memory, 1, [1.0, 0.0, 0.0], 1.0);
+    let second = add(&mut memory, 2, [1.0, 0.0, 0.0], 2.0);
+    assert_eq!(first, second);
+    let mut forest = ContextForest::default();
+
+    let roots = forest
+        .compact(
+            [
+                ContextLeaf {
+                    node_id: first,
+                    chronology: 2,
+                },
+                ContextLeaf {
+                    node_id: second,
+                    chronology: 9,
+                },
+            ],
+            &memory,
+            1,
+        )
+        .unwrap();
+
+    assert_eq!(roots.len(), 1);
+    assert_eq!(roots[0].handle, ContextHandle::Node(first));
+    assert_eq!((roots[0].chronology_start, roots[0].chronology_end), (2, 9));
+    assert!(forest.triangles.is_empty());
+}
+
+#[test]
+fn nested_triangle_identity_uses_the_full_overlapping_chronology_range() {
+    let mut config = DcmdbConfig::dense(3);
+    config.theta_similarity = 0.999_999;
+    let mut memory = Dcmdb::new(config).unwrap();
+    let a = add(&mut memory, 1, [1.0, 0.0, 0.0], 1.0);
+    let b = add(&mut memory, 2, [0.999, 0.02, 0.0], 2.0);
+    let c = add(&mut memory, 3, [0.98, 0.19, 0.0], 3.0);
+    let mut forest = ContextForest::default();
+
+    let roots = forest
+        .compact(
+            [
+                ContextLeaf {
+                    node_id: a,
+                    chronology: 10,
+                },
+                ContextLeaf {
+                    node_id: b,
+                    chronology: 20,
+                },
+                ContextLeaf {
+                    node_id: c,
+                    chronology: 15,
+                },
+            ],
+            &memory,
+            1,
+        )
+        .unwrap();
+
+    assert_eq!(roots.len(), 1);
+    assert_eq!(
+        (roots[0].chronology_start, roots[0].chronology_end),
+        (10, 20)
+    );
+    forest.verify(&memory).unwrap();
+}
+
+#[test]
+fn ranked_roots_reach_old_relevant_context_without_changing_geometry() {
+    let mut config = DcmdbConfig::dense(3);
+    config.theta_similarity = 0.99999;
+    let mut memory = Dcmdb::new(config).unwrap();
+    let vectors = [
+        [1., 0., 0.],
+        [0., 1., 0.],
+        [0., 0., 1.],
+        [-1., 0., 0.],
+        [0., -1., 0.],
+    ];
+    let leaves: Vec<_> = vectors
+        .into_iter()
+        .enumerate()
+        .map(|(i, v)| ContextLeaf {
+            node_id: add(&mut memory, i as u8 + 1, v, i as f64),
+            chronology: i as u64,
+        })
+        .collect();
+    let oldest = leaves[0].node_id;
+    let mut forest = ContextForest::default();
+    forest.compact(leaves, &memory, 5).unwrap();
+    let before = postcard::to_allocvec(&forest).unwrap();
+    let nodes = postcard::to_allocvec(&memory).unwrap();
+    let query = Embedding::normalized(vec![1., 0., 0.], 3).unwrap();
+    let roots = forest.ranked_roots(&memory, &query, None, 3).unwrap();
+    assert_eq!(roots[0].handle, ContextHandle::Node(oldest));
+    assert_eq!(postcard::to_allocvec(&forest).unwrap(), before);
+    assert_eq!(postcard::to_allocvec(&memory).unwrap(), nodes);
+    let reopened: ContextForest = postcard::from_bytes(&before).unwrap();
+    assert_eq!(
+        reopened.ranked_roots(&memory, &query, None, 3).unwrap(),
+        roots
+    );
+}
+
+#[test]
+fn three_triangle_roots_fold_to_one_without_expanding_its_handle_or_losing_children() {
+    let mut config = DcmdbConfig::dense(3);
+    config.theta_similarity = 1.0;
+    config.tension_promote_count = 99;
+    let mut memory = Dcmdb::new(config).unwrap();
+    let mut forest = ContextForest::default();
+    let mut leaves = Vec::new();
+    for (i, angle) in [-0.30_f32, -0.29, 0.0, 0.01, 0.30, 0.31]
+        .into_iter()
+        .enumerate()
+    {
+        leaves.push(ContextLeaf {
+            node_id: add(
+                &mut memory,
+                i as u8 + 1,
+                [angle.cos(), angle.sin(), 0.],
+                i as f64 + 1.,
+            ),
+            chronology: i as u64 + 1,
+        });
+    }
+    forest.compact(leaves.clone(), &memory, 3).unwrap();
+    assert_eq!(forest.roots.len(), 3);
+    assert!(
+        forest
+            .roots
+            .iter()
+            .all(|r| matches!(r.handle, ContextHandle::Triangle(_)))
+    );
+    let child_ids: Vec<_> = forest.triangles.keys().copied().collect();
+    let handle_bytes = postcard::to_allocvec(&forest.roots[0].handle)
+        .unwrap()
+        .len();
+    forest.compact([], &memory, 1).unwrap();
+    assert_eq!(forest.roots.len(), 1);
+    assert_eq!(forest.triangles.len(), 5); // three retained children plus two pairwise parents
+    assert!(child_ids.iter().all(|id| forest.triangles.contains_key(id)));
+    assert_eq!(
+        postcard::to_allocvec(&forest.roots[0].handle)
+            .unwrap()
+            .len(),
+        handle_bytes
+    );
+    assert_eq!(
+        forest.referenced_nodes(),
+        leaves.iter().map(|l| l.node_id).collect()
+    );
+    let ContextHandle::Triangle(id) = forest.roots[0].handle else {
+        panic!("expected parent")
+    };
+    assert_eq!(forest.triangles[&id].leaf_count, 6);
+    let saved = postcard::to_allocvec(&forest).unwrap();
+    let reopened: ContextForest = postcard::from_bytes(&saved).unwrap();
+    reopened.verify(&memory).unwrap();
+    assert_eq!(reopened, forest);
+}

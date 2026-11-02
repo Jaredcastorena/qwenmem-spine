@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "question": "What is the exact Zircon recovery label, preserving Unicode, case and punctuation? Return only the label. Use existing heart evidence only. Do not search the web or filesystem. Cite the exact supporting event ID. Keep the answer to one sentence.",
+  "answer": "The exact Zircon recovery label is \"ZIRCON_RECOVERY_Ω\".",
+  "asserted_literal": "ZIRCON_RECOVERY_Ω",
+  "expected_literal": "Δ-sable_47/µ",
+  "source_full": "Zircon exact recovery label is Δ-sable_47/µ. Preserve capitalization, Unicode and punctuation byte for byte.",
+  "source_excerpt": "Zircon exact recovery label is Δ-sable_47/µ. Preserve capitalization, Unicode and punctuation byte for byte.",
+  "coverage_threshold": 0.65,
+  "fixture": "Synthetic benchmark example. Selected evidence is only the literal source, not the original full saved-turn context.",
+  "actual_grounding_evidence": [
+    "Zircon exact recovery label is Δ-sable_47/µ. Preserve capitalization, Unicode and punctuation byte for byte."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "nodes": {
+    "node:decision": {"event_id": "event:decision", "text": "Project Atlas uses port 7319. This decision supersedes the old port 7300.", "vector": [1.0, 0.03, 0.0]},
+    "node:exception": {"event_id": "event:exception", "text": "Exception: the offline recovery endpoint must remain on port 7300. Changing the main port does not change the recovery endpoint.", "vector": [1.0, 0.10, 0.0]},
+    "node:failure": {"event_id": "event:failure", "text": "The first migration failed because the recovery endpoint was changed with the main endpoint. Restore recovery to 7300.", "vector": [1.0, 0.15, 0.0]},
+    "node:verification": {"event_id": "event:verification", "text": "Verified migration: main endpoint 7319; offline recovery 7300. Both probes passed. The earlier blanket port replacement was incorrect.", "vector": [1.0, 0.07, 0.0]}
+  },
+  "triangles": {
+    "triangle:decision-exception": {"apex": "node:decision", "left": "node:decision", "right": "node:exception"},
+    "triangle:failure-verification": {"apex": "node:verification", "left": "node:failure", "right": "node:verification"},
+    "triangle:root": {"apex": "node:verification", "left": "triangle:decision-exception", "right": "triangle:failure-verification"}
+  },
+  "roots": ["triangle:root"]
+}

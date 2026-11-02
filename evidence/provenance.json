@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "kind": "sanitized aggregate research evidence; historical observations, not new inference runs",
+  "source": {
+    "host_project": "Jaredcastorena/Rust-spine",
+    "host_version": "0.3.2",
+    "host_base_revision": "07857378505d2573b623da4f81a892bfb9b5f2cd",
+    "published_source": "the source snapshot containing this evidence",
+    "scope": "Historical retention links the pinned host baseline. Current normal-chat controls use the modified native provider/backend in this snapshot; they are a separate experiment."
+  },
+  "compiler": {
+    "repo": "divagr18/qwenputer",
+    "revision": "01cf657d353bdc0c795c2d57a28a3e3f483f20a1"
+  },
+  "models": [
+    {
+      "repo": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+    },
+    {
+      "repo": "divagr1925/Qwen3.5-4B-Qwenputer-Filesystem",
+      "revision": "9112e41f03516ca4d0125f5bfa975008487a8458"
+    },
+    {
+      "repo": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+    },
+    {
+      "repo": "cross-encoder/nli-MiniLM2-L6-H768",
+      "revision": "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d"
+    }
+  ],
+  "merged_checkpoint": {
+    "construction": "Compile five BF16 triangle-navigation layers and merge them with the pinned Qwen3.5-4B language component; no retention-task training or fine-tuning.",
+    "build_method": "src/triangle_memory/merge.py",
+    "dispatch": "triangle prefix for commands; language layers for text",
+    "compiled_layers": 5,
+    "circuit": {
+      "layers": 5,
+      "dims": 185,
+      "heads": 5,
+      "ffn_units": 217,
+      "max_units": 98,
+      "max_heads": 2
+    },
+    "base_hidden_width": 2560,
+    "merged_hidden_width": 2816,
+    "resident_node_and_triangle_capacity": 64,
+    "maximum_descents": 8,
+    "published_merged_model_revision": "f69dbcfe5a7cebea1c287f6f1d76c8e90b2c9a98",
+    "weights_included": false,
+    "limitations": [
+      "The merged model is text-only.",
+      "BF16 padding and normalization changes do not establish bitwise language equivalence to base Qwen."
+    ],
+    "repository": "Jared1728/qwenmem-spine"
+  },
+  "evidence_files": [
+    "current-harness.json",
+    "retention-and-raw-controls.json",
+    "nli-diagnostic.json"
+  ],
+  "export_policy": "Allowlisted counts, booleans, methods, thresholds, dependency revisions, synthetic literals and limitations; original operational records and state are not included."
+}

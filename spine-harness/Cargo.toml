@@ -1,0 +1,26 @@
+[package]
+name = "qwenmem-spine-retention"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+async-trait = "0.1.92"
+blake3 = "1.8.7"
+tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread"] }
+tempfile = "3.27.0"
+postcard = { version = "1.1.3", default-features = false, features = ["alloc"] }
+spine-heart = { path = "../rust-spine/crates/spine-heart" }
+spine-models = { path = "../rust-spine/crates/spine-models" }
+spine-runtime = { path = "../rust-spine/crates/spine-runtime" }
+
+[profile.dev]
+opt-level = 2
+debug = 0
+
+[patch.crates-io]
+candle-core = { path = "../rust-spine/vendor/candle-core" }

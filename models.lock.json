@@ -1,0 +1,41 @@
+{
+  "models": [
+    {
+      "repo": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+      "directory": "models/qwen3.5-4b"
+    },
+    {
+      "repo": "divagr1925/Qwen3.5-4B-Qwenputer-Filesystem",
+      "revision": "9112e41f03516ca4d0125f5bfa975008487a8458",
+      "directory": "models/qwenputer-filesystem"
+    },
+    {
+      "repo": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "directory": "models/minilm",
+      "files": [
+        "config.json",
+        "tokenizer.json",
+        "model.safetensors",
+        "README.md"
+      ]
+    },
+    {
+      "repo": "cross-encoder/nli-MiniLM2-L6-H768",
+      "revision": "b95119ce93d3e065de6214e38cd4a97b0f2f2c6d",
+      "directory": "models/nli-minilm",
+      "files": [
+        "config.json",
+        "tokenizer.json",
+        "model.safetensors",
+        "README.md"
+      ]
+    }
+  ],
+  "compiler": {
+    "repo": "divagr18/qwenputer",
+    "revision": "01cf657d353bdc0c795c2d57a28a3e3f483f20a1",
+    "archive_sha256": "90808cfa03ac0f0ec7c5883985b8d4b49a456870d695204414d940ee5960984a"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "phase": "CPU diagnostic of unchanged native claim extraction, NLI and repair predicate",
+  "method": {
+    "driver": "scripts/unicode_nli_comparison.py",
+    "native_probe": "rust-spine/crates/spine-cli/examples/unicode_nli_probe.rs",
+    "pair_order_probe": "rust-spine/crates/spine-cli/examples/nli_pair_order_probe.rs",
+    "matrix": "Replay the same saved incorrect answer with original extraction or one forced explicit claim, each against a 1000-character source window or full original source. Only extraction is bypassed for forced claims. No LLM regeneration or repair generation is run.",
+    "native_pair_order": [
+      "hypothesis",
+      "evidence"
+    ],
+    "evidence_fanout": 3,
+    "tokenizer_pair_limit": 512,
+    "coverage_threshold": 0.65,
+    "contradiction_threshold": 0.5,
+    "repair_predicate": "claim_count > 0 and (coverage < 0.650 or contradiction >= 0.500)"
+  },
+  "synthetic_case": {
+    "asserted_literal": "ZIRCON_RECOVERY_Ω",
+    "expected_literal": "Δ-sable_47/µ",
+    "source_chars": 108,
+    "source_utf8_bytes": 110,
+    "source_full": "Zircon exact recovery label is Δ-sable_47/µ. Preserve capitalization, Unicode and punctuation byte for byte.",
+    "excerpt_equals_full": true,
+    "original_request_contains_expected_literal": false,
+    "original_request_contains_source_id": false,
+    "wrong_hypothesis": "The exact Zircon recovery label was equal to ZIRCON_RECOVERY_Ω."
+  },
+  "matrix": [
+    {
+      "id": "A",
+      "claim_mode": "original_extractor",
+      "claim_count": 0,
+      "nli_evaluated": false,
+      "nli_entailment": null,
+      "nli_contradiction": null,
+      "repair_triggered": false,
+      "repair_generation_run": false,
+      "evaluated_pairs": 0,
+      "hypotheses": [],
+      "candidate_pair_tokens": [],
+      "all_pairs_fit_token_limit": true,
+      "evidence_window": "1000_character_bound"
+    },
+    {
+      "id": "B",
+      "claim_mode": "original_extractor",
+      "claim_count": 0,
+      "nli_evaluated": false,
+      "nli_entailment": null,
+      "nli_contradiction": null,
+      "repair_triggered": false,
+      "repair_generation_run": false,
+      "evaluated_pairs": 0,
+      "hypotheses": [],
+      "candidate_pair_tokens": [],
+      "all_pairs_fit_token_limit": true,
+      "evidence_window": "full_source"
+    },
+    {
+      "id": "C",
+      "claim_mode": "forced_explicit",
+      "claim_count": 1,
+      "nli_evaluated": true,
+      "nli_entailment": 0.015317380428314209,
+      "nli_contradiction": 0.12873005867004395,
+      "repair_triggered": true,
+      "repair_generation_run": false,
+      "evaluated_pairs": 1,
+      "hypotheses": [
+        "The exact Zircon recovery label was equal to ZIRCON_RECOVERY_Ω."
+      ],
+      "candidate_pair_tokens": [
+        56
+      ],
+      "all_pairs_fit_token_limit": true,
+      "evidence_window": "1000_character_bound"
+    },
+    {
+      "id": "D",
+      "claim_mode": "forced_explicit",
+      "claim_count": 1,
+      "nli_evaluated": true,
+      "nli_entailment": 0.015317380428314209,
+      "nli_contradiction": 0.12873005867004395,
+      "repair_triggered": true,
+      "repair_generation_run": false,
+      "evaluated_pairs": 1,
+      "hypotheses": [
+        "The exact Zircon recovery label was equal to ZIRCON_RECOVERY_Ω."
+      ],
+      "candidate_pair_tokens": [
+        56
+      ],
+      "all_pairs_fit_token_limit": true,
+      "evidence_window": "full_source"
+    }
+  ],
+  "actual_selected_evidence": {
+    "excerpt_count": 6,
+    "excerpt_character_counts": [
+      236,
+      217,
+      139,
+      148,
+      148,
+      261
+    ],
+    "source_missing_from_selection": true,
+    "rows": [
+      {
+        "id": "actual_original",
+        "claim_mode": "original_extractor",
+        "claim_count": 0,
+        "nli_evaluated": false,
+        "nli_entailment": null,
+        "nli_contradiction": null,
+        "repair_triggered": false,
+        "repair_generation_run": false,
+        "evaluated_pairs": 0,
+        "hypotheses": [],
+        "candidate_pair_tokens": [],
+        "all_pairs_fit_token_limit": true
+      },
+      {
+        "id": "actual_forced",
+        "claim_mode": "forced_explicit",
+        "claim_count": 1,
+        "nli_evaluated": true,
+        "nli_entailment": 0.12987405061721802,
+        "nli_contradiction": 0.10546892881393433,
+        "repair_triggered": true,
+        "repair_generation_run": false,
+        "evaluated_pairs": 3,
+        "hypotheses": [
+          "The exact Zircon recovery label was equal to ZIRCON_RECOVERY_Ω."
+        ],
+        "candidate_pair_tokens": [
+          73,
+          82,
+          56,
+          86,
+          86,
+          79
+        ],
+        "all_pairs_fit_token_limit": true
+      }
+    ]
+  },
+  "correct_literal_positive_control": {
+    "id": "correct_literal_control",
+    "claim_mode": "forced_explicit",
+    "claim_count": 1,
+    "nli_evaluated": true,
+    "nli_entailment": 0.0058448887430131435,
+    "nli_contradiction": 0.0020768868271261454,
+    "repair_triggered": true,
+    "repair_generation_run": false,
+    "evaluated_pairs": 1,
+    "hypotheses": [
+      "The exact Zircon recovery label was equal to Δ-sable_47/µ."
+    ],
+    "candidate_pair_tokens": [
+      54
+    ],
+    "all_pairs_fit_token_limit": true
+  },
+  "pair_order_controls": [
+    {
+      "id": "wrong_native_order",
+      "entailment": 0.015317380428314209,
+      "contradiction": 0.12873005867004395,
+      "neutral": 0.8559525609016418,
+      "order": "hypothesis_then_evidence"
+    },
+    {
+      "id": "wrong_reversed_order",
+      "entailment": 0.7350977063179016,
+      "contradiction": 0.14501231908798218,
+      "neutral": 0.1198899894952774,
+      "order": "evidence_then_hypothesis"
+    },
+    {
+      "id": "correct_native_order",
+      "entailment": 0.005844891536980867,
+      "contradiction": 0.0020768868271261454,
+      "neutral": 0.9920782446861267,
+      "order": "hypothesis_then_evidence"
+    },
+    {
+      "id": "correct_reversed_order",
+      "entailment": 0.8460951447486877,
+      "contradiction": 0.0048158313147723675,
+      "neutral": 0.14908896386623383,
+      "order": "evidence_then_hypothesis"
+    },
+    {
+      "id": "identical_source_control",
+      "entailment": 0.9785545468330383,
+      "contradiction": 0.004517110995948315,
+      "neutral": 0.01692824997007847,
+      "order": "identical_texts"
+    }
+  ],
+  "limitations": [
+    "A/B have zero claims and zero evaluated pairs: null scores mean NLI was not run. Native default report zeroes are not model scores.",
+    "The source is 108 characters, so bounded and complete evidence are identical; this matrix cannot establish a truncation effect.",
+    "C/D trigger repair through low coverage, not high contradiction.",
+    "The forced correct literal also triggers repair. Extraction alone is not reliable exact-value verification.",
+    "Reversing pair order also raises the incorrect literal above coverage threshold, so direction reversal is not an exact-string verification fix.",
+    "The forced hypothesis does not separately verify the fabricated citation.",
+    "No successful generated repair or production behavior change is claimed."
+  ]
+}

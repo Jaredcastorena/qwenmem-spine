@@ -1,0 +1,312 @@
+{
+  "schema": 1,
+  "phase": "current native-harness controls",
+  "method": {
+    "runner": "scripts/spine_end_to_end.py",
+    "audit": "scripts/audit_native_harness.py",
+    "mode": "Actual merged checkpoint through Rust spine chat, real tools, NLI and native context selection.",
+    "primary_fixture_events": 534,
+    "strict_scoring": "Known retention values require the expected value and an original supporting event citation; unknown facts require abstention. Operational checks are separate assertions.",
+    "navigator": "The provider installs an empty forest. These scores do not measure active compiled navigation in normal chat.",
+    "triangle_only": "Automatic hybrid recall text is withheld; current task, history, retained state and explicit memory-tool results remain available."
+  },
+  "runs": [
+    {
+      "id": "native_mixed_primary",
+      "automatic_memory_mode": "native_default",
+      "evaluation_mode": "unassisted_acceptance",
+      "checks": 14,
+      "passed": 14,
+      "failures": [],
+      "completed_model_rounds": 32,
+      "prompt_tokens_range": [
+        4674,
+        11981
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_current",
+          "passed": true
+        },
+        {
+          "name": "retention_exception",
+          "passed": true
+        },
+        {
+          "name": "retention_obligation",
+          "passed": true
+        },
+        {
+          "name": "retention_historical",
+          "passed": true
+        },
+        {
+          "name": "retention_preference",
+          "passed": true
+        },
+        {
+          "name": "retention_literal",
+          "passed": true
+        },
+        {
+          "name": "retention_cancelled",
+          "passed": true
+        },
+        {
+          "name": "retention_unknown",
+          "passed": true
+        },
+        {
+          "name": "real_tool_read",
+          "passed": true
+        },
+        {
+          "name": "real_tool_write",
+          "passed": true
+        },
+        {
+          "name": "session_fact_acknowledged",
+          "passed": true
+        },
+        {
+          "name": "new_process_heart_recall",
+          "passed": true
+        },
+        {
+          "name": "operator_interrupt",
+          "passed": true
+        },
+        {
+          "name": "inference_after_interrupt",
+          "passed": true
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    },
+    {
+      "id": "native_mixed_boundaries",
+      "automatic_memory_mode": "native_default",
+      "evaluation_mode": "unassisted_acceptance",
+      "checks": 2,
+      "passed": 0,
+      "failures": [
+        "retention_older_merged_event",
+        "retention_long_source_tail"
+      ],
+      "completed_model_rounds": 8,
+      "prompt_tokens_range": [
+        9338,
+        13198
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_older_merged_event",
+          "passed": false
+        },
+        {
+          "name": "retention_long_source_tail",
+          "passed": false
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    },
+    {
+      "id": "native_triangle_only_primary",
+      "automatic_memory_mode": "native_triangles_only",
+      "evaluation_mode": "unassisted_acceptance",
+      "checks": 14,
+      "passed": 11,
+      "failures": [
+        "retention_literal",
+        "retention_unknown",
+        "real_tool_write"
+      ],
+      "completed_model_rounds": 25,
+      "prompt_tokens_range": [
+        3767,
+        16069
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_current",
+          "passed": true
+        },
+        {
+          "name": "retention_exception",
+          "passed": true
+        },
+        {
+          "name": "retention_obligation",
+          "passed": true
+        },
+        {
+          "name": "retention_historical",
+          "passed": true
+        },
+        {
+          "name": "retention_preference",
+          "passed": true
+        },
+        {
+          "name": "retention_literal",
+          "passed": false
+        },
+        {
+          "name": "retention_cancelled",
+          "passed": true
+        },
+        {
+          "name": "retention_unknown",
+          "passed": false
+        },
+        {
+          "name": "real_tool_read",
+          "passed": true
+        },
+        {
+          "name": "real_tool_write",
+          "passed": false
+        },
+        {
+          "name": "session_fact_acknowledged",
+          "passed": true
+        },
+        {
+          "name": "new_process_heart_recall",
+          "passed": true
+        },
+        {
+          "name": "operator_interrupt",
+          "passed": true
+        },
+        {
+          "name": "inference_after_interrupt",
+          "passed": true
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    },
+    {
+      "id": "native_triangle_only_boundaries",
+      "automatic_memory_mode": "native_triangles_only",
+      "evaluation_mode": "unassisted_acceptance",
+      "checks": 2,
+      "passed": 1,
+      "failures": [
+        "retention_long_source_tail"
+      ],
+      "completed_model_rounds": 5,
+      "prompt_tokens_range": [
+        4148,
+        7776
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_older_merged_event",
+          "passed": true
+        },
+        {
+          "name": "retention_long_source_tail",
+          "passed": false
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    },
+    {
+      "id": "explicit_recall_boundaries",
+      "automatic_memory_mode": "native_triangles_only",
+      "evaluation_mode": "explicit_recall_probe",
+      "checks": 2,
+      "passed": 2,
+      "failures": [],
+      "completed_model_rounds": 4,
+      "prompt_tokens_range": [
+        4196,
+        8638
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_older_merged_event",
+          "passed": true
+        },
+        {
+          "name": "retention_long_source_tail",
+          "passed": true
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    },
+    {
+      "id": "explicit_recall_literal",
+      "automatic_memory_mode": "native_triangles_only",
+      "evaluation_mode": "explicit_recall_probe",
+      "checks": 1,
+      "passed": 1,
+      "failures": [],
+      "completed_model_rounds": 2,
+      "prompt_tokens_range": [
+        3951,
+        8923
+      ],
+      "checks_detail": [
+        {
+          "name": "retention_literal",
+          "passed": true
+        }
+      ],
+      "provider_evidence_injection_disabled": true,
+      "active_compiled_navigation": false
+    }
+  ],
+  "explicit_recall_total": {
+    "passed": 3,
+    "checks": 3,
+    "scope": "Separate assisted diagnostics; they do not replace unassisted failures."
+  },
+  "failure_analysis": [
+    {
+      "case": "native_mixed_boundaries",
+      "result": "Both values were correct, but both required original event citations were omitted; strict score remains 0/2."
+    },
+    {
+      "case": "native_triangle_only_primary/retention_literal",
+      "result": "Invented Unicode label and citation; the original source was absent from the selected evidence, and zero extracted claims suppressed repair."
+    },
+    {
+      "case": "native_triangle_only_primary/retention_unknown",
+      "result": "An invented IP triggered grounding repair; repair answered an older label question instead of the current question."
+    },
+    {
+      "case": "native_triangle_only_primary/real_tool_write",
+      "result": "An invented file path was denied; the repeated call was blocked by the action budget."
+    },
+    {
+      "case": "native_triangle_only_boundaries/retention_long_source_tail",
+      "result": "A valid event citation accompanied an incorrect guess from the visible source prefix. Explicit native recall recovered the exact tail value."
+    }
+  ],
+  "source_window_limits": {
+    "triangle_excerpt_characters": 1000,
+    "native_recall_prefix_characters": 3000,
+    "tested_source_tail_characters": 2320,
+    "scope": "The tail fixture fits the existing recall prefix. This is not evidence that arbitrary source tails can be recovered."
+  },
+  "historical_checks": {
+    "rust_passed": 277,
+    "rust_failed": 0,
+    "backend_python_passed": 19,
+    "strict_clippy": "passed",
+    "build": "passed",
+    "format": "passed"
+  },
+  "limitations": [
+    "Bounded native-selected handoff to the compiled navigator remains unfinished.",
+    "The NLI extractor/gate defect is unchanged and documented separately.",
+    "The NLI defect does not explain every failed answer or tool argument."
+  ]
+}

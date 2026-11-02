@@ -1,0 +1,6 @@
+# Reuse an existing compatible environment; no automatic installation occurs.
+# torch is device/platform specific and must be provisioned separately.
+# Existing CPU/XPU checks used torch 2.14.1+xpu; select a deliberate matching build.
+numpy==2.5.4
+safetensors==0.8.0
+transformers==5.19.0

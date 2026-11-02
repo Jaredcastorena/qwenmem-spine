@@ -1,0 +1,20 @@
+[package]
+name = "spine-models"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Native Rust embedding and verification models for Spine"
+publish = false
+
+[dependencies]
+blake3.workspace = true
+candle-core.workspace = true
+candle-nn.workspace = true
+candle-transformers.workspace = true
+serde_json.workspace = true
+spine-heart = { version = "0.3.2", path = "../spine-heart" }
+tokenizers.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

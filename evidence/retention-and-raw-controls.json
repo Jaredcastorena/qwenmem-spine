@@ -1,0 +1,744 @@
+{
+  "schema": 1,
+  "phase": "historical standalone compiled navigation and raw full-context controls",
+  "retention": {
+    "method": {
+      "runner": "scripts/retention_benchmark.py",
+      "scorer": "scripts/score_retention.py",
+      "source_generator": "scripts/make_retention_corpus.py",
+      "native_harness": "spine-harness/src/main.rs",
+      "routing": "Native Rust selects semantic routes; actual compiled BF16 layers replay commands. The host renders original source evidence and asserts equality with native CLI output. Each question starts a fresh language cache.",
+      "corpus": "Synthetic fixed questions with 16 repeating noise templates; logical session labels are not application restarts.",
+      "oracle": "Expected-answer labels select oracle sources only for the upper-bound control.",
+      "recent_context": "2048-token source-body budget; metadata makes the total prompt larger."
+    },
+    "stages": [
+      {
+        "stage": {
+          "current_expected": "FALCON-AX-482",
+          "event_count": 26,
+          "history_tokens": 4274,
+          "name": "4k",
+          "sessions": 2
+        },
+        "resident_records": 19,
+        "conditions": {
+          "spine_compiled": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              572,
+              901
+            ]
+          },
+          "recent_2k": {
+            "correct": 1,
+            "grounded_correct": 1,
+            "total": 8,
+            "prompt_tokens_range": [
+              2657,
+              2664
+            ]
+          },
+          "oracle_evidence": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              114,
+              311
+            ]
+          }
+        },
+        "native_compiled_address_parity": {
+          "passed": 8,
+          "total": 8
+        },
+        "cases": [
+          {
+            "id": "current",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "exception",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "obligation",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "historical",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "preference",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "literal",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "cancelled",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "unknown",
+            "compiled_correct": true,
+            "compiled_support_cited": false,
+            "compiled_abstained": true
+          }
+        ]
+      },
+      {
+        "stage": {
+          "current_expected": "FALCON-AX-482",
+          "event_count": 140,
+          "history_tokens": 32812,
+          "name": "32k",
+          "sessions": 6
+        },
+        "resident_records": 19,
+        "conditions": {
+          "spine_compiled": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              572,
+              901
+            ]
+          },
+          "recent_2k": {
+            "correct": 1,
+            "grounded_correct": 1,
+            "total": 8,
+            "prompt_tokens_range": [
+              2655,
+              2662
+            ]
+          },
+          "oracle_evidence": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              114,
+              311
+            ]
+          }
+        },
+        "native_compiled_address_parity": {
+          "passed": 8,
+          "total": 8
+        },
+        "cases": [
+          {
+            "id": "current",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "exception",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "obligation",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "historical",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "preference",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "literal",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "cancelled",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "unknown",
+            "compiled_correct": true,
+            "compiled_support_cited": false,
+            "compiled_abstained": true
+          }
+        ]
+      },
+      {
+        "stage": {
+          "current_expected": "RAVEN-ZQ-917",
+          "event_count": 534,
+          "history_tokens": 131215,
+          "name": "128k",
+          "sessions": 23
+        },
+        "resident_records": 20,
+        "conditions": {
+          "spine_compiled": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              572,
+              901
+            ]
+          },
+          "recent_2k": {
+            "correct": 1,
+            "grounded_correct": 1,
+            "total": 8,
+            "prompt_tokens_range": [
+              2676,
+              2683
+            ]
+          },
+          "oracle_evidence": {
+            "correct": 8,
+            "grounded_correct": 8,
+            "total": 8,
+            "prompt_tokens_range": [
+              114,
+              333
+            ]
+          }
+        },
+        "native_compiled_address_parity": {
+          "passed": 8,
+          "total": 8
+        },
+        "cases": [
+          {
+            "id": "current",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "exception",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "obligation",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "historical",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "preference",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "literal",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "cancelled",
+            "compiled_correct": true,
+            "compiled_support_cited": true,
+            "compiled_abstained": false
+          },
+          {
+            "id": "unknown",
+            "compiled_correct": true,
+            "compiled_support_cited": false,
+            "compiled_abstained": true
+          }
+        ]
+      }
+    ],
+    "primary_total": {
+      "grounded_correct": 24,
+      "total": 24
+    },
+    "additional_boundary_cases": {
+      "stage": {
+        "event_count": 20,
+        "history_tokens": 4736,
+        "name": "boundary",
+        "sessions": 7
+      },
+      "conditions": {
+        "spine_compiled": {
+          "correct": 0,
+          "grounded_correct": 0,
+          "total": 2,
+          "prompt_tokens_range": [
+            1971,
+            1993
+          ]
+        },
+        "recent_2k": {
+          "correct": 0,
+          "grounded_correct": 0,
+          "total": 2,
+          "prompt_tokens_range": [
+            2652,
+            2654
+          ]
+        },
+        "oracle_evidence": {
+          "correct": 2,
+          "grounded_correct": 2,
+          "total": 2,
+          "prompt_tokens_range": [
+            284,
+            599
+          ]
+        },
+        "full_history": {
+          "correct": 2,
+          "grounded_correct": 2,
+          "total": 2
+        }
+      },
+      "cases": [
+        {
+          "id": "older_merged_event",
+          "compiled_correct": false,
+          "compiled_abstained": true,
+          "oracle_correct": true,
+          "full_history_correct": true
+        },
+        {
+          "id": "long_source_tail",
+          "compiled_correct": false,
+          "compiled_abstained": true,
+          "oracle_correct": true,
+          "full_history_correct": true
+        }
+      ],
+      "causes": {
+        "older_merged_event": "Renderer selects only the two most recent source events in a merged node.",
+        "long_source_tail": "Renderer limits each source body to 1000 characters."
+      },
+      "scope": "Both remain failures of the original historical renderer. Later native-tool recovery is reported separately in current-harness.json."
+    },
+    "native_integration": {
+      "cognition_current": true,
+      "encrypted_reopen_exact": true,
+      "maintenance_preserves_forest": true,
+      "transcript_idempotent": true
+    },
+    "controlled_geometry": {
+      "nodes": 32,
+      "triangles": 31,
+      "maximum_depth": 8,
+      "native_walks": 32,
+      "actual_compiled_model_test_passed": true,
+      "embedding_kind": "designed controlled vectors, not learned semantic embeddings"
+    },
+    "separate_process_navigation_restore": {
+      "new_process": true,
+      "alternate_matches_native": true,
+      "answer_grounded_correct": true,
+      "answer_value": "CANCELLED",
+      "scope": "Restores compiled alternate-route state; this is distinct from raw language-cache restart. Earlier over-specific question abstained and an ad hoc JSON-format attempt failed before the final established benchmark prompt passed."
+    },
+    "historical_cpu_checks": {
+      "python_passed": 19,
+      "opt_in_model_test_skipped": 1,
+      "expected_renderer_failures": 2,
+      "native_regression_tests_passed": 25
+    }
+  },
+  "raw_controls": {
+    "method": {
+      "runner": "scripts/bounded_full_context.py",
+      "audit": "src/triangle_memory/raw_audit.py",
+      "backend": "Fixed-capacity cache, fused-only SDPA, 256-token synchronized prefill, no token eviction. All questions are answered together.",
+      "scoring": "Independent of benchmark grades: exact value or explicit abstention, every citation exists, and at least one cited source supports each known answer. Recomputed from saved answers during this aggregate export without model inference."
+    },
+    "valid_runs": [
+      {
+        "id": "bounded_4k",
+        "history_tokens": 4274,
+        "prompt_tokens": 6435,
+        "answer_tokens": 703,
+        "truncated": false,
+        "verified": 8,
+        "total": 8,
+        "triangle_state_unchanged": true,
+        "cases": [
+          {
+            "id": "current",
+            "expected": "FALCON-AX-482",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "exception",
+            "expected": "7913",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "obligation",
+            "expected": "SIGNOFF-KELP-29",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "historical",
+            "expected": "ERR_KAPPA_62",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "preference",
+            "expected": "YYYY-DD-MM",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "literal",
+            "expected": "Δ-sable_47/µ",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "cancelled",
+            "expected": "CANCELLED",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "unknown",
+            "expected": null,
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "id": "bounded_32k",
+        "history_tokens": 32812,
+        "prompt_tokens": 42742,
+        "answer_tokens": 703,
+        "truncated": false,
+        "verified": 8,
+        "total": 8,
+        "triangle_state_unchanged": true,
+        "cases": [
+          {
+            "id": "current",
+            "expected": "FALCON-AX-482",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "exception",
+            "expected": "7913",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "obligation",
+            "expected": "SIGNOFF-KELP-29",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "historical",
+            "expected": "ERR_KAPPA_62",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "preference",
+            "expected": "YYYY-DD-MM",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "literal",
+            "expected": "Δ-sable_47/µ",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "cancelled",
+            "expected": "CANCELLED",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "unknown",
+            "expected": null,
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "id": "diagnostic_replay_128k",
+        "history_tokens": 131215,
+        "prompt_tokens": 167780,
+        "answer_tokens": 746,
+        "truncated": false,
+        "verified": 8,
+        "total": 8,
+        "triangle_state_unchanged": true,
+        "cases": [
+          {
+            "id": "current",
+            "expected": "RAVEN-ZQ-917",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "exception",
+            "expected": "7913",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "obligation",
+            "expected": "SIGNOFF-KELP-29",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "historical",
+            "expected": "ERR_KAPPA_62",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "preference",
+            "expected": "YYYY-DD-MM",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "literal",
+            "expected": "Δ-sable_47/µ",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "cancelled",
+            "expected": "CANCELLED",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "unknown",
+            "expected": null,
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "id": "fresh_process_full_cache_restore_128k",
+        "history_tokens": 131215,
+        "prompt_tokens": 167780,
+        "answer_tokens": 746,
+        "truncated": false,
+        "verified": 8,
+        "total": 8,
+        "triangle_state_unchanged": true,
+        "cases": [
+          {
+            "id": "current",
+            "expected": "RAVEN-ZQ-917",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "exception",
+            "expected": "7913",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "obligation",
+            "expected": "SIGNOFF-KELP-29",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "historical",
+            "expected": "ERR_KAPPA_62",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "preference",
+            "expected": "YYYY-DD-MM",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "literal",
+            "expected": "Δ-sable_47/µ",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "cancelled",
+            "expected": "CANCELLED",
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          },
+          {
+            "id": "unknown",
+            "expected": null,
+            "value_correct": true,
+            "all_citations_exist": true,
+            "verified": true
+          }
+        ]
+      }
+    ],
+    "smaller_controls": {
+      "4k_resume_position": 4096,
+      "4k_prior_uninterrupted_answer_bytes_equal": true,
+      "32k_prior_uninterrupted_answer_bytes_equal": true
+    },
+    "large_replay": {
+      "resume_position": 65536,
+      "full_attention_cache_count": 8,
+      "positions_per_full_attention_cache": 167780,
+      "validation": "Each delta-rule output validated/synchronized; prefill/decode logits checked for finite values.",
+      "cpu_fallback_triggered": false
+    },
+    "fresh_process_restore": {
+      "resume_position": 167780,
+      "answer_bytes_equal_to_replay": true,
+      "generated_token_ids_equal_to_replay": true,
+      "prompt_identity_equal_to_replay": true,
+      "scope": "Independent process and scoring from the saved full-prompt cache; not an independent full prefill."
+    },
+    "preserved_invalid_attempt": {
+      "prompt_tokens": 167780,
+      "resume_position": 65536,
+      "answer_tokens": 1400,
+      "truncated": true,
+      "mechanical_audit_passed": 0,
+      "mechanical_audit_total": 8,
+      "output_kind": "punctuation",
+      "valid_accuracy_measurement": false,
+      "reason": "NaN recurrent state and logits; exact numerical trigger unresolved.",
+      "checkpoint_audit": [
+        {
+          "saved_prompt_position": 65536,
+          "nonfinite_tensor_count": 0,
+          "first_nonfinite_layer_index": null,
+          "logits_finite": true
+        },
+        {
+          "saved_prompt_position": 131072,
+          "nonfinite_tensor_count": 6,
+          "first_nonfinite_layer_index": 33,
+          "logits_finite": false
+        },
+        {
+          "saved_prompt_position": 167780,
+          "nonfinite_tensor_count": 6,
+          "first_nonfinite_layer_index": 33,
+          "logits_finite": false
+        }
+      ]
+    },
+    "earlier_interrupted_attempts": [
+      {
+        "mode": "eager 32k",
+        "last_prefill_tokens": 32768,
+        "logged_prompt_tokens": 42731,
+        "accuracy": null,
+        "status": "No completed answer; unscored."
+      },
+      {
+        "mode": "fused 128k",
+        "last_prefill_tokens": 65536,
+        "logged_prompt_tokens": 167780,
+        "accuracy": null,
+        "status": "No completed answer; unscored. Host peak RAM was not measured; interruption cause is not established."
+      }
+    ],
+    "limits": [
+      "Successful diagnostic replay does not isolate a backend fault or prove a permanent numerical fix.",
+      "Full-cache restart does not establish reproducibility across many independent full prefills.",
+      "Raw batched timings and per-question retrieval timings are not direct speed comparisons."
+    ]
+  }
+}
