@@ -4,6 +4,20 @@ The repository preserves a research controller at its root and a complete Rust
 Spine application under `rust-spine/`. The Python package name and diagnostic
 commands retain `triangle_memory`/`triangle` terminology for source compatibility.
 
+## Terms used in this repository
+
+| Term | Meaning |
+| --- | --- |
+| Heart | Rust Spine's encrypted persistent memory store and event journal. |
+| Triangle | A record joining an apex memory node to two child branches; a branch can itself be a triangle. |
+| Forest | A collection of these hierarchies, accessed through root handles. |
+| Compiled navigator | Five model layers that follow explicit address/branch commands over installed records. They do not choose semantic routes. |
+| Native retrieval | Rust code that ranks memories, traverses the native hierarchy and selects source text for a prompt or tool result. |
+| Navigation snapshot | Saved controller state tied to a particular forest and checkpoint; distinct from the heart and the language KV cache. |
+
+The central distinction is between the standalone compiled-navigation path and
+the current full-agent path. The diagrams below show them separately.
+
 ## Compiled navigation path
 
 ```mermaid
@@ -31,10 +45,12 @@ an alternate retains the remaining descent budget. Slots are temporary addresses
 in one verified installation, not stable event or triangle IDs.
 
 The [forest loader](../src/triangle_memory/forest.py) verifies resolvable links,
-distinct branches, no cycles, node provenance, consistent finite embeddings and
-cosine coherence of at least 0.8 from apex to branch coordinates. The demo uses
-synthetic coordinates; native retention uses MiniLM embeddings. A 64-record
-resident bound includes both nodes and triangles. The native diagnostic installer
+distinct branches, no cycles, node provenance and consistent finite embeddings.
+It checks a cosine threshold of 0.8 from apex to branch coordinates, with a
+[numeric overflow limitation](known-limitations.md#numerical-behavior-and-resources)
+for extreme finite inputs. The demo uses synthetic coordinates; native retention
+uses MiniLM embeddings. A 64-record resident bound includes both nodes and
+triangles. The native diagnostic installer
 also rejects stored depth above eight even if a selected walk is short. The
 generic Python loader can install deeper topology; its traversal still stops
 after eight descents, as the depth-62 boundary test demonstrates.

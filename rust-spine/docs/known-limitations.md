@@ -14,5 +14,6 @@ source text does not fix this extraction path.
 
 Grounding therefore does not guarantee exact identifier, case, punctuation or
 Unicode fidelity. Check important exact values against original source text.
-The issue is documented as a current limitation while other release work
-continues; it is not fixed in this source snapshot.
+The issue is not fixed in this unmaintained source snapshot. See the snapshot's
+[full limitations](../../docs/known-limitations.md) for navigation, evaluation and
+runtime boundaries.

@@ -1,5 +1,9 @@
 # Desktop feature preservation and Python behavior audit
 
+This audit is retained from upstream Rust Spine v0.3.2. Its counts and platform
+claims describe that historical baseline; they do not validate the optional
+qwenmem backend. See the snapshot's [results](../../docs/results.md) for that scope.
+
 Scope: the released desktop workspace, starting from v0.3.1 and its test-only
 follow-up. Android and the separate Codex-provider work are outside this change.
 The reference is the Python source supplied with the project, including its

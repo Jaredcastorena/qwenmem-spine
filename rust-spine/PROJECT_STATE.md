@@ -1,5 +1,11 @@
 # Project state
 
+This document preserves the upstream Rust Spine v0.3.2 baseline and earlier
+acceptance history. Its test counts, platform CI and release claims are not a
+fresh validation of the qwenmem snapshot. See the snapshot's [results](../docs/results.md)
+and [reproduction guide](../docs/reproduction.md) for integration-specific evidence.
+Standard Spine does not require Python; the optional local-model backend does.
+
 ## v0.3.2 desktop audit
 
 - [Behavior map and acceptance](docs/desktop-parity-audit.md): 261 Rust tests,
@@ -113,4 +119,5 @@ Legacy Python DCMDb/Thymos state is not queried by the native runtime. Running t
   for every release target and is freshness-checked in CI and release preflight.
 - CI and release workflows pass current `actionlint` validation.
 
-Update this file when an architectural boundary or accepted verification baseline changes.
+This upstream baseline is retained for context; snapshot-specific boundaries
+and limitations are documented in [the integration guide](docs/triangle-model.md).

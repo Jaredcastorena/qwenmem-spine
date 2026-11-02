@@ -1,9 +1,15 @@
 # qwenmem-spine
 
-A fixed research source snapshot of compiled triangle navigation, a Qwen3.5-4B
-merge/runtime, and integration with Rust Spine's durable memory and agent tools.
-The navigation program executes in five compiled model layers; original source
-text remains in the external encrypted Spine heart.
+An experimental memory system that combines Rust Spine's durable memory and
+agent tools with a modified Qwen3.5-4B language model. Five added model layers
+execute a small navigation program over a hierarchy of memory records.
+Original source text stays outside the model, in Spine's encrypted memory store
+(the **heart**) or the standalone tests' source fixtures.
+
+There are two execution paths: standalone tests exercise the compiled navigator;
+normal chat uses Spine's native retrieval and tools with the modified language
+model. **Normal chat does not yet use the compiled navigator.** This repository
+preserves both paths as a fixed research source snapshot.
 
 **This snapshot is unmaintained.** No updates, bug fixes, new features,
 compatibility updates or ongoing support are planned. This describes maintenance
@@ -57,6 +63,12 @@ A clean-machine installation has not been validated. The tested full-model
 environment was Linux, Python 3.12 and Intel Arc Pro B70; portability to other
 accelerators is not established.
 
+For a first run, follow the guide's [small CPU controller](docs/reproduction.md#small-cpu-controller)
+section. It exercises navigation without downloading the 4B language model.
+For chat, use the [full Rust agent](docs/reproduction.md#full-rust-agent-and-current-acceptance)
+section after provisioning its dependencies. Build the included `rust-spine/`
+source: standard upstream Spine binaries do not include this integration.
+
 After provisioning the environment and model described in that guide:
 
 ```bash
@@ -77,12 +89,14 @@ available-host-memory reserve. See the guide before running the large controls.
 
 ## Read the research
 
-- [Technical write-up](docs/writeup.md): question, mechanism, experiments and interpretation.
-- [Architecture](docs/architecture.md): execution boundaries, state and native agent flow.
-- [Results](docs/results.md): all measured stages, controls and failures.
-- [Reproduction](docs/reproduction.md): exact source/build/evaluation entry points.
-- [Model card](docs/model-card.md): derivative checkpoint identity, runtime and limitations.
-- [Known limitations](docs/known-limitations.md) and [Unicode NLI diagnostic](docs/unicode-nli-diagnostic.md).
+| To understand… | Read |
+| --- | --- |
+| The research question and interpretation | [Technical write-up](docs/writeup.md) |
+| Which work happens in Rust, Python or model state | [Architecture and terminology](docs/architecture.md) |
+| What passed, what failed and what each score means | [Results](docs/results.md) |
+| How to set up and run each experiment | [Reproduction](docs/reproduction.md) |
+| The downloadable checkpoint and its required runtime | [Model card](docs/model-card.md) |
+| Where the system remains unreliable | [Known limitations](docs/known-limitations.md) and [Unicode NLI diagnostic](docs/unicode-nli-diagnostic.md) |
 
 ## Source layout and licenses
 

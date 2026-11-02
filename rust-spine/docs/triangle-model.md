@@ -1,5 +1,9 @@
 # Local triangle model integration
 
+For the complete setup, use the snapshot's [reproduction guide](../../docs/reproduction.md).
+The direct commands below assume you have entered the included `rust-spine/`
+directory from the repository root (`cd rust-spine`).
+
 The local triangle provider runs through normal `spine chat`, including terminal and browser input, the tool registry, host policy, encrypted transcript journal, grounding, context compaction and operator controls. Rust owns the heart and selects memory. A persistent Rust-owned Python process runs the merged Qwen3.5 checkpoint. This remains a Python-backed inference implementation. The current normal-chat path is a native-harness control: it installs an empty navigation forest and consumes only the harness's messages. Compiled navigation is still exercised by the separate `spine triangle` diagnostic; it is not currently active in normal chat.
 
 The actual checkpoint is connected to the normal harness: native memory recall,
@@ -17,8 +21,12 @@ Use the pinned Rust toolchain and Cargo dependencies, an existing Python environ
 Build from this fork:
 
 ```sh
-cargo build -p spine-cli --locked --offline
+CARGO_BUILD_JOBS=2 cargo build -p spine-cli --locked
 ```
+
+Add `--offline` only when the pinned Cargo dependencies are already cached.
+This direct build places the executable in `rust-spine/target/debug/`; the root
+`scripts/build-native.sh` instead uses `artifacts/spine-target/debug/`.
 
 The development profile is optimized because native CPU embedding and grounding inference are too slow without optimization. Release builds retain the upstream release profile.
 
@@ -39,7 +47,9 @@ Set `PYTHON`, `TRIANGLE_MODEL_DIR`, `COMPILER_DIR`, `MINILM_DIR` and `NLI_DIR` t
 
 Create the workspace directory first. A missing heart is initialized by the normal first-run flow; the operator chooses its passphrase. Replace `--terminal` with `--web` for the existing browser interface. For the configured Intel XPU, select `xpu` and launch the entire application through the host memory guard. Local triangle sessions do not read or save remote-provider connection preferences.
 
-The explicit path-based command above is the portable configuration interface.
+The explicit path-based command above shows the configuration interface; its
+CPU device selection is not a validated full-model performance or memory-fit
+claim. The measured full-model workflow uses guarded Intel XPU execution.
 Provision the Python environment, compiler checkout and model artifacts separately
 before launch. They are not bundled into this source distribution. The automatic
 dependency setup used by standard Spine does not install this optional backend's
@@ -99,4 +109,4 @@ Known upstream NLI limitation: string-valued claims can produce zero extracted
 claims and bypass verification/repair. [Rust-spine issue #40](https://github.com/Jaredcastorena/Rust-spine/issues/40)
 has been submitted; a fix is deferred. See [known limitations](known-limitations.md).
 
-The full workspace and backend unit suites exercise native projection, cryptography, tool lifecycle, browser API, persistence, protocol parsing, source pagination and state validation. Actual-model application acceptance additionally uses disposable copies of synthetic hearts, the public browser chat API, local memory tools, NLI and explicit filesystem tool tasks. The lab records exact outcomes separately; unit or mock checks are not counted as real-model accuracy evidence. Clean-machine installation, broad model quality and public distribution remain separate release gates.
+The full workspace and backend unit suites exercise native projection, cryptography, tool lifecycle, browser API, persistence, protocol parsing, source pagination and state validation. Actual-model application acceptance additionally uses disposable copies of synthetic hearts, the browser chat API, local memory tools, NLI and explicit filesystem tool tasks. The snapshot's [results](../../docs/results.md) record exact outcomes separately; unit or mock checks are not counted as real-model accuracy evidence. Clean-machine installation and broad model quality remain unvalidated. This fixed snapshot does not promise further release work.

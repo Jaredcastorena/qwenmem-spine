@@ -1,5 +1,10 @@
 # Python-to-Rust behavior acceptance
 
+This is the inherited upstream behavior/acceptance record. Counts below describe
+that baseline, not a new qwenmem validation. See the snapshot's [results](../docs/results.md)
+for its measured integration checks. References to a Python oracle concern the
+legacy application; the optional qwenmem inference backend separately requires Python.
+
 Rust is the base implementation. Python Spine is the behavioral oracle, not a
 runtime dependency or a shared mutable database. This checklist distinguishes
 implemented behavior from release acceptance; passing a lane alone does not
@@ -51,10 +56,10 @@ accept the combined branch.
 
 The Rust architecture intentionally differs from a literal Python port:
 no synthetic triangle scaffold or periodic three-to-one folding, no Python
-production dependency, and no legacy Python state import requirement. New device
+production dependency for standard Spine, and no legacy Python state import requirement. New device
 revocation and smaller-model selection remain separate projects.
 
-## Current desktop audit
+## Upstream v0.3.2 desktop audit
 
 The [desktop audit](docs/desktop-parity-audit.md) supersedes the historical
 acceptance counts below: 261 Rust tests and 257 isolated Python tests pass.

@@ -32,6 +32,14 @@ hybrid recall text but retains task/history, native triangle context, plans,
 working evidence, tools and policy. The three assisted recall successes do not
 replace the automatic failures.
 
+The [operational scorer](../scripts/spine_end_to_end.py) checks a new recall
+request after interruption; it does not test resuming the interrupted essay.
+Its restart assertion requires the persisted beacon value and a 64-character
+hexadecimal string, but does not independently match that
+identifier to the original event. The 14/14 score retains these original
+acceptance criteria and should not be read as verification of task resumption
+or of citation provenance after restart.
+
 The literal failure invented `ZIRCON_RECOVERY_Ω` instead of `Δ-sable_47/µ` and
 fabricated a citation without a recall call. The extractor emitted zero claims,
 so NLI/repair did not run. For the unknown-IP question, the gate *did* extract a

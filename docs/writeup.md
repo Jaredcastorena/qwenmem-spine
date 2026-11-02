@@ -38,11 +38,13 @@ recall.
 
 The compiled controller installs a flattened resident table of at most 64 total
 nodes and triangles. It supports eight descents per opening, real apex emission,
-explicit leaves and errors, and an eight-entry alternate-route stack. The
-record table is read-only during navigation; cursor, pending child, route stack
+explicit leaves and errors, and eight indexed saved-alternate slots. The
+record table is read-only during navigation; cursor, pending child, saved alternatives
 and descent count mutate in Gated DeltaNet recurrent state. The host validates
 topology, provenance, address resolution, finite semantic coordinates and the
-apex/branch coherence constraint before installation.
+apex/branch coherence constraint before installation. The research loader's
+coherence check has an [overflow edge case](known-limitations.md#numerical-behavior-and-resources)
+for extreme finite coordinates; the native backend rejects non-finite norms.
 
 Qwenputer compiles the program to five layers with five logical heads, 185 logical
 residual dimensions and 217 logical feed-forward units. The merged checkpoint
@@ -140,7 +142,10 @@ own a heart/encoder or run an extra source scan. The Rust harness owns tool
 permissions, action budgets, planning, transcript recovery, native recall and
 grounding. The model/provider connection is operational: native mixed-memory
 tests pass 14/14 operational assertions, including real file tools, restart and
-interruption recovery.
+interruption recovery. These operational assertions check a new recall after
+interruption, not resumption of the interrupted task. The restart check requires
+the persisted value and a 64-character hexadecimal identifier, without independently
+matching that identifier to the original event. See the [scoring scope](results.md#current-native-harness).
 
 With automatic hybrid recall withheld, triangle-only automatic memory passes
 11/14. Failures include a fabricated exact literal, a repair that answers an

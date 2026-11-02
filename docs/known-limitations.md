@@ -52,6 +52,14 @@ See the [four-cell diagnostic](unicode-nli-diagnostic.md).
 
 ## Numerical behavior and resources
 
+The standalone Python [forest loader](../src/triangle_memory/forest.py) checks
+finite coordinate values but can overflow while calculating cosine similarity.
+For example, opposing vectors with magnitudes around `1e308` can produce NaN,
+which slips past its `< 0.8` rejection. Its coherence validation is therefore
+not reliable for arbitrary finite numeric inputs. The native backend rejects
+non-finite norms; this edge case was not an observed failure of the measured
+MiniLM fixtures. It is separate from the full-model NaN behavior below.
+
 Two early raw-context attempts were interrupted without complete answers. Their
 exact causes are unresolved. A later full-input bounded run developed NaN
 recurrent state/logits; its punctuation output is an invalid numerical control,

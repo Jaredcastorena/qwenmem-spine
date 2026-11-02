@@ -1,5 +1,10 @@
 # Local triangle model backend
 
+This is the backend protocol reference. For setup and normal chat, start with
+the snapshot's [reproduction guide](../../../docs/reproduction.md). Commands
+below run from the included `rust-spine/` directory, with `python` pointing to
+the provisioned environment.
+
 Run with an existing Python environment, a merged triangle/Qwen3.5 checkpoint,
 and the pinned Qwenputer compiler checkout named in [NOTICE.md](NOTICE.md):
 
@@ -11,7 +16,8 @@ python backends/triangle/server.py \
 ```
 
 `--compiler-dir` also accepts the checkout's `experimental/riscv` directory.
-Use `--device xpu` only with a configured supported XPU environment and a host memory guard. The backend caps its XPU allocator at 70% of device capacity. Model loading
+The CPU command illustrates the interface; full-model execution was measured on
+Intel XPU. Use `--device xpu` only with a configured supported XPU environment and a host memory guard. The backend caps its XPU allocator at 70% of device capacity. Model loading
 is lazy; `hello` and `install` require only the Python standard library. A model or
 device failure is returned as an error and terminates the backend. There is no
 runtime reference or fake-model fallback. The process uses local files only.

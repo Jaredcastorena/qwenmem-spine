@@ -5,6 +5,19 @@ weights or generated stores/caches. The commands below provision those inputs
 explicitly. They describe the supported research workflow, not a validated
 clean-machine installation or a promise of identical language-model outputs.
 
+## Choose a workflow
+
+| Goal | Follow these sections |
+| --- | --- |
+| Try navigation without a language-model download | [Small CPU controller](#small-cpu-controller) |
+| Generate synthetic hearts and run native checks | CPU setup, then [native build and fixtures](#native-build-and-synthetic-fixtures) |
+| Chat with the modified model | XPU setup, [native build](#native-build-and-synthetic-fixtures), [checkpoint download or build](#merged-checkpoint-download-or-build), [guarded execution](#guarded-intel-full-model-execution), then [full Rust agent](#full-rust-agent-and-current-acceptance) |
+| Repeat retrieval and restart experiments | All full-model prerequisites, then [standalone retention](#standalone-retention-and-cross-process-state) |
+| Inspect the large-context diagnostic | All full-model prerequisites, then [raw full-history control](#raw-full-history-control) |
+
+The full-model paths require substantially more memory, disk space and setup
+than the CPU controller. Read the guard requirements before provisioning them.
+
 ## Environment and pins
 
 The measured environment used Linux, Python 3.12.3, Rust 1.99.1, PyTorch
@@ -13,6 +26,12 @@ Intel Arc Pro B70 (32 GB device memory). Small controller checks also run on CPU
 Full-model CUDA, macOS and Windows execution have not been verified. The included
 Rust toolchain and Cargo lock files pin the native build; Python pins are in
 [requirements.lock.txt](../requirements.lock.txt).
+
+Install Python 3.12 with `venv`/pip support before running bootstrap. Native builds
+also require rustup with the pinned toolchain and native build tools (a C/C++
+compiler, CMake, Perl and `pkg-config`). Linux full-model commands require
+`systemd-run` and `taskset`.
+Bootstrap installs Python packages, not these operating-system prerequisites.
 
 [models.lock.json](../models.lock.json) pins the base model, comparison model,
 compiler, MiniLM encoder and NLI model. The compiler revision is
@@ -95,6 +114,8 @@ An authenticated account with access is needed while the repository is private.
 Download a fixed model revision into the runtime's expected directory:
 
 ```bash
+# If this environment is not already authenticated:
+.venv/bin/hf auth login
 .venv/bin/hf download Jared1728/qwenmem-spine \
   --revision f69dbcfe5a7cebea1c287f6f1d76c8e90b2c9a98 \
   --local-dir models/qwen3.5-triangles
@@ -115,7 +136,8 @@ To rebuild instead, fetch the base weights and run the supplied merge:
   models/qwen3.5-4b models/qwen3.5-triangles
 ```
 
-The output directory must be suitable for a new generated checkpoint. This
+The output directory must be absent or empty; the merge refuses a nonempty
+destination, including one populated by the download above. This
 compiles navigation and merges it with the text component; it does not train or
 fine-tune on the evaluation questions. Allow substantial disk space for base and
 merged weights, Python dependencies, compiler and any later state checkpoints.
@@ -125,17 +147,21 @@ checkpoint, which is unnecessary for this runtime or these reproductions.
 ## Guarded Intel full-model execution
 
 Install the XPU environment with `./scripts/bootstrap.sh xpu` if the environment
-was initially provisioned for CPU. A compatible Intel Level Zero/OpenCL runtime
-must be installed. If it resides in a custom directory, `INTEL_RUNTIME_ROOT`
+was initially provisioned for CPU. Bootstrap reinstalls PyTorch from the selected
+device index so a CPU wheel cannot silently satisfy an XPU setup. A compatible
+Intel Level Zero/OpenCL runtime must be installed. If it resides in a custom directory, `INTEL_RUNTIME_ROOT`
 can name the layout expected by [guarded-python.sh](../scripts/guarded-python.sh);
 otherwise the wrapper uses system libraries. It does not install drivers.
 
 The wrapper requires a user-systemd manager with cgroup memory controls. It
 enforces a 24 GiB host cap, 20 GiB throttle and no swap; startup requires 40 GiB
 available host RAM. A watchdog stops the child below 16 GiB available memory,
-and one exclusive model job runs at a time. CPU helper threads use selected
-physical cores (`TRIANGLE_CPU_THREADS` defaults to four). The runtime/bounded
-runner also caps the XPU allocator at 70%. Do not remove these controls to repeat
+and one exclusive model job runs at a time. CPU helper threads prefer selected
+physical cores (`TRIANGLE_CPU_THREADS` defaults to four), falling back to logical
+CPU IDs when topology or ranking metadata is unavailable. The Rust agent's Python
+backend and the bounded full-history runner also cap the XPU allocator at 70%.
+The wrapper itself and standalone merged-model runners do not set that device
+allocator cap. Do not remove the enforced controls to repeat
 the historical large-context workload. Missing controls cause refusal rather
 than an unbounded fallback.
 
@@ -166,7 +192,7 @@ After native build and model provisioning:
 ./scripts/spine-local.sh --web
 ```
 
-The convenience launcher creates a separate local encrypted heart, prompts for
+The convenience launcher creates or reopens `local-spine/heart.spine`, prompts for
 its passphrase, and runs the application through the guard with local model
 paths. It does not load saved remote-provider preferences. The direct path-based
 configuration interface is documented in

@@ -1,5 +1,12 @@
 # Spine
 
+**Reading this inside qwenmem-spine?** Start with the snapshot's
+[README](../README.md) and [reproduction guide](../docs/reproduction.md).
+The installation sections below describe standard upstream Spine. For the
+qwenmem integration, keep this included source tree and use the root build and
+launch scripts. Commands in this document assume `rust-spine/` as the working
+directory unless they explicitly clone and enter the upstream repository.
+
 Spine is a self-hosted personal AI partner. Its memory lives in an encrypted
 local **heart**, it can use tools, and it works in either a terminal or a
 browser. Standard Spine is one executable: there is no database to manage and no
@@ -9,7 +16,7 @@ The optional [local triangle-model integration](docs/triangle-model.md) adds a
 Rust-managed Python backend to normal terminal/web chat, with native memory
 tools, grounding and durable transcript recovery. Compiled memory navigation is
 available through the separate diagnostic command; its bounded normal-chat
-handoff is still being developed. The model/provider connection and native
+handoff is unfinished in this snapshot. The model/provider connection and native
 memory retrieval are operational. The [known NLI validation bug](docs/known-limitations.md)
 is reported upstream and remains a disclosed limitation.
 
@@ -269,7 +276,7 @@ outside the image so they are not silently copied into an image layer.
 The multiline commands below use Bash. In PowerShell, enter each command on one
 line or replace each trailing `\` with PowerShell's backtick continuation.
 
-1. If you do not already have this checkout, download it:
+1. For a separate standard Spine installation, clone upstream:
 
    ```bash
    git clone https://github.com/Jaredcastorena/Rust-spine.git
@@ -671,7 +678,9 @@ build tools.
    cargo --version
    ```
 
-3. Download this repository and enter its directory:
+3. For standard Spine, clone upstream and enter its directory. This does not
+   download the qwenmem integration; its build steps are in the
+   [snapshot reproduction guide](../docs/reproduction.md#native-build-and-synthetic-fixtures).
 
    ```bash
    git clone https://github.com/Jaredcastorena/Rust-spine.git
