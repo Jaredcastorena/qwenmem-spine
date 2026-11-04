@@ -10,15 +10,43 @@ The controller supports 64 combined resident nodes/triangles and eight descents.
 The resident table is installed externally and remains read-only during
 navigation. Semantic ranking, coherent-apex selection, triangle creation/folding,
 chronology, source storage and evidence selection stay on the host. There is no
-resident paging or autonomous language-model route policy. Current normal chat
-installs an empty navigation forest. Its bounded native-selected handoff is
-unfinished, and standalone navigation results cannot establish that handoff.
+resident paging or autonomous language-model route policy. Default chat installs
+an empty navigation forest. `--triangle-internal-context` adds a bounded
+native-selected handoff whose source gate is described in the
+[validation record](internal-context-validation.md). Standalone navigation and
+historical empty-forest scores cannot establish full-agent internal navigation.
+
+Internal context exports the complete closure of each selected native root.
+Each bank must fit 64 records and depth eight; a larger selected closure fails
+explicitly before language generation. The implementation does not synthesize
+leaves, silently substitute native retrieval or install the whole forest.
+Source bodies remain on the host and become language tokens only after verified
+apex output authorizes their original selected rows. Exact traces establish
+address traversal, not source entailment or answer correctness.
+
+Native Rust checks apex coherence when creating triangles. Existing triangles
+can survive later centroid changes, so the native Python installer validates
+retained structure and finite vector shape/norm without rechecking current
+cosine coherence. Applying the creation threshold during installation caused
+the first internal-context sequence to stop; that compatibility check was
+corrected. The standalone research loader retains its separate cosine check.
 
 Native recursive storage can exceed the compiled table. A compact outer handle
 does not make durable storage free, and a small language prompt does not account
 for model weights, dense navigation state or source bodies.
 
 ## Source selection and automatic recovery
+
+The completed internal triangle-only sequence scored 12/14. Its compiled source
+gate passed in all 27 completed model rounds, but the model fabricated an exact
+literal/citation and used an incorrect absolute file-write path. Host denial
+prevented that write. Verified traversal therefore does not establish reliable
+language answers or tool arguments.
+The repaired internal boundary run remained 1/2: older merged-event recovery
+passed, while the required long-source tail was not recovered.
+Explicit recall recovered both boundaries and the literal for a separate 3/3;
+the added instructions do not repair the automatic scores. See the
+[internal-context evidence](../evidence/internal-context-20261103.json).
 
 The historical native renderer can omit older still-binding events by selecting
 only two recent events per node and can omit source tails after 1,000 characters.
@@ -27,12 +55,14 @@ Current `heart_recall` can recover the measured 2,320-character source-tail case
 because its prefix budget is 3,000 characters. It has no event continuation
 offset, so this is not arbitrary-length paging.
 
-Automatic triangle-only application behavior passed 11/14, with fabricated
+Historical empty-forest triangle-only application behavior passed 11/14, with fabricated
 literal/citation, wrong-question repair and invented tool path failures. Both
 native mixed-memory boundary answers contained the right values but omitted
 required original citations, scoring 0/2. Triangle-only boundaries scored 1/2.
 Explicitly requested recall passed the three selected probes; assistance changes
-the task and does not erase the original failures.
+the task and does not erase the original failures. The opt-in internal handoff
+preserves these native selection and excerpt budgets; it cannot recover a source
+row or tail that the native renderer omitted.
 
 ## Grounding: Rust-spine issue #40
 

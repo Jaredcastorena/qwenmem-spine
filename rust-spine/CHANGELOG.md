@@ -1,5 +1,29 @@
 # Changelog
 
+## Included qwenmem integration — measurements from 2026-11-03
+
+This repository revision includes the implementation and evidence below. The
+first historical chat battery left internal context off; the November 3 second
+battery enabled it. Default chat remains unchanged.
+
+- Add opt-in `--triangle-internal-context` to gate native-selected triangle
+  excerpts through the checkpoint's compiled navigator before generation.
+  Complete selected closures are bounded to 64 records and depth eight;
+  overflow fails explicitly. Default chat retains its empty navigator forest.
+- Preserve the context sidecar through tools, repair/finish and harness
+  checkpoints; refresh child context and keep onboarding explicitly memory-free.
+  Correct native excerpt truncation validation and allow retained triangles
+  whose centroids evolved after their creation-time coherence check.
+- Record 83 focused CPU checks and the B70 application matrix: mixed 14/14,
+  triangle-only 12/14, boundaries 1/2 and separately assisted recall 3/3.
+  All 70 completed rounds passed the navigation gate; actual zero-bank full-chat
+  failure blocked completion. See the [validation record](../docs/internal-context-validation.md)
+  for corrected execution counts, causal restoration, resource measurements and
+  retained failures. NLI issue #40 remains deferred.
+
+The release entries below are inherited upstream history. Their test counts,
+platform coverage and publication claims are not new qwenmem acceptance results.
+
 ## 0.3.2 — 2026-10-28
 
 - Bound safe-stop summaries and streamed-response memory, recover failed-child

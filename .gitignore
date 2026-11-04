@@ -1,8 +1,9 @@
-/.venv/
+/.venv
 /.cache/
+/local-spine/
 /.pytest_cache/
-/models/
-/vendor/
+/models
+/vendor
 /artifacts/
 /target/
 /spine-harness/target/

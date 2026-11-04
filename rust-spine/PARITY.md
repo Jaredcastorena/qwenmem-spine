@@ -5,6 +5,14 @@ that baseline, not a new qwenmem validation. See the snapshot's [results](../doc
 for its measured integration checks. References to a Python oracle concern the
 legacy application; the optional qwenmem inference backend separately requires Python.
 
+The November 3, 2026 [internal-context checks](../docs/internal-context-validation.md)
+cover a separate opt-in path: 83 focused CPU checks and actual B70 runs with
+verified compiled navigation in all 70 completed model rounds. Mixed-memory
+assertions scored 14/14, triangle-only 12/14, boundaries 1/2 and separately
+assisted recall 3/3. They do not revalidate every upstream parity row or platform
+below. Default chat still uses an empty navigator forest, and native semantic
+selection, compaction and source storage remain host operations.
+
 Rust is the base implementation. Python Spine is the behavioral oracle, not a
 runtime dependency or a shared mutable database. This checklist distinguishes
 implemented behavior from release acceptance; passing a lane alone does not

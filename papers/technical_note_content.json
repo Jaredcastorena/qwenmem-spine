@@ -1,0 +1,179 @@
+{
+  "title": "qwenmem-spine",
+  "subtitle": "Compiled Navigation Layers for Persistent Evidence Retrieval",
+  "meta": "Technical note | Revised November 4, 2026 | Measurements: October 31-November 3, 2026",
+  "abstract": "qwenmem-spine compiles a deterministic navigator into five BF16 layers prepended to Qwen3.5-4B and connects it to Rust Spine’s persistent evidence store. A new opt-in application path requires actual checkpoint navigation to authorize native-selected source excerpts before language generation. Across 70 completed model rounds, this gate passed with 210 bank executions and 146 branch commands. The operational sequence scored 14/14 with mixed native memory and 12/14 with automatic hybrid recall withheld; separate boundaries scored 1/2 and explicitly requested recall 3/3. Clearing the resident bank caused an invalid trace and blocked language completion; restoration recovered exact bank bytes. Historical standalone retrieval answered eight fixed questions at three stored-history lengths, including 131,215 content tokens. These results establish bounded internal navigation and its application gate, while preserving failures in source coverage, exact-value grounding and tool behavior. They do not establish unlimited context, statistically improved accuracy or a semantic advantage over equivalent host navigation.",
+  "sections": [
+    {
+      "heading": "1. Compiled memory control",
+      "paragraphs": [
+        "A triangle references an existing apex memory node and two child branches, which may themselves be triangles. Native folding replaces roots with compact recursive handles while preserving descendants and original events in Spine’s encrypted persistent store, the heart. The apex represents existing evidence rather than generated summary text. A native audit retained a 33-byte serialized root handle across one to 96 source coordinates, all reachable after reload. This measures compact addressing; backing storage still grows.",
+        "Using Qwenputer, a bounded traversal program is compiled into five layers prepended to the text component of Qwen3.5-4B. The merge expands residual width from 2,560 to 2,816, pads projections and adjusts normalization gains. It is compilation and merging, without fine-tuning on the evaluation questions. BF16 rounding can change language behavior relative to the base model. A custom runtime dispatches navigation commands and language generation separately, preserving navigation state while answering from a fresh language context.",
+        "The traversal program resides in weights; installed topology, cursor, saved alternatives and counters reside in recurrent state. It supports 64 combined node/triangle records per resident bank and eight descents per opening. It does not implement paging, topology mutation or autonomous semantic route selection. Tensor-identity audits and controller tests with host forest lookup disabled support execution through the compiled state. Triangle construction, semantic ranking, compaction, source storage and evidence rendering remain host operations."
+      ],
+      "paragraphs_after": []
+    },
+    {
+      "heading": "2. Native-selected source authorization",
+      "paragraphs": [
+        "The November 3 integration adds an opt-in --triangle-internal-context path to real Rust Spine chat. For each root selected by native retrieval, Rust exports its complete original closure, including real apexes and both branches. Each closure must fit 64 records and depth eight; excess capacity fails explicitly. The provider does not scan the source store, replace topology with fabricated leaves or silently fall back to native prompt context. The first chat battery omitted this flag and installed an empty navigator forest. The second battery enabled it for all measured internal-context conditions. The flag remains opt-in in this revision; default chat still uses the empty forest.",
+        "Native selection retains depth eight, fanout three, 16 coordinates and a 1,024-estimated-token rehydration budget. Rendering retains at most 12 excerpts, the first 1,000 characters per source plus a 12-character truncation suffix when needed, and at most the two most recent events per selected node. Topology contains no source bodies. Selected source rows and retained native context travel separately in a system-message sidecar.",
+        "Before each completion, the provider reinstalls that request’s banks and executes commands through the actual checkpoint’s five compiled layers. Rust independently checks exact integer traces, installed address order, forest identity and execution evidence. Only emitted apex IDs authorize original source rows; every selected row must pass before its excerpt enters the language prompt. Empty selection is explicitly no_memory, not successful navigation. Mixed mode also supplies automatic hybrid recall, outside this triangle-excerpt gate.",
+        "The main sidecar persists through tool rounds, repair and finish requests, and harness checkpoints. Auxiliary children refresh native context from their own task and recent tool output; onboarding sends an explicit empty packet under its no-recall policy. This is a navigation gate over host-selected evidence. It does not prove answer correctness or entailment, and cannot authorize text that source selection omitted."
+      ],
+      "paragraphs_after": []
+    },
+    {
+      "heading": "3. Evaluation conditions",
+      "paragraphs": [
+        "Measurements used one Intel Arc Pro B70 with 32 GB device memory, Linux, Python 3.12.3, PyTorch 2.14.1+xpu and Transformers 5.19.0. November 3 runs used the unchanged merged checkpoint, real Spine tools and grounding gate, and fresh test copies of synthetic stores. Initially, the main fixture contained 534 events, 19 nodes, 18 roots and one triangle; boundary fixtures contained 20 events, 11 nodes, ten roots and one triangle. Chat could subsequently add state to its test copies. All original source hearts remained unchanged.",
+        "The 14-assertion sequence combines eight question checks with file read, file write, fact acknowledgement, new-process recall, interruption and subsequent inference. Questions cover correction, exception, pending approval, historical failure, preference, Unicode, cancellation and abstention. Seven require exact answers with supporting original citations. Triangle-only mode withholds automatic hybrid recall text but retains native triangle context, task/history, plans, working evidence, tools and policy. It is not evidence isolation from every other application channel.",
+        "Application requests specified temperature zero, a 1,024-token output limit, four tool rounds and two history turns bounded to 5,000 characters. Host modulation imposed temperature 0.1 and outputs were sampled. Each condition was run once; there are no seeded repeated-run statistics. Explicit-recall probes additionally instruct the model to call native recall and inspect original text, changing the task."
+      ],
+      "paragraphs_after": []
+    },
+    {
+      "heading": "4. Completed internal-context results",
+      "paragraphs": [
+        "All five corrected conditions completed. Every completed model round passed the source gate and actual-checkpoint execution checks; language generation preserved navigation state. Table 1 separates behavioral outcomes from execution counts. Repeated installations are loads of selected topology, not counts of distinct triangles."
+      ],
+      "table": {
+        "caption": "Table 1. November 3 opt-in internal-context runs. Counts include only completed model rounds.",
+        "headers": [
+          "Condition",
+          "Score",
+          "Rounds",
+          "Banks",
+          "Triangle installs",
+          "Branches"
+        ],
+        "rows": [
+          [
+            "Native mixed memory",
+            "14/14",
+            "31",
+            "93",
+            "183",
+            "79"
+          ],
+          [
+            "Triangle-only automatic memory",
+            "12/14",
+            "27",
+            "81",
+            "76",
+            "59"
+          ],
+          [
+            "Triangle-only boundaries",
+            "1/2",
+            "5",
+            "15",
+            "4",
+            "4"
+          ],
+          [
+            "Explicit boundary recall",
+            "2/2",
+            "4",
+            "12",
+            "4",
+            "4"
+          ],
+          [
+            "Explicit literal recall",
+            "1/1",
+            "3",
+            "9",
+            "0",
+            "0"
+          ],
+          [
+            "Completed execution total",
+            "—",
+            "70",
+            "210",
+            "267",
+            "146"
+          ]
+        ]
+      },
+      "paragraphs_after": [
+        "Two interrupted requests executed six additional banks, 49 triangle-record installations and 15 branch commands, excluded from Table 1. The literal-recall probe used leaf-only banks and does not establish branch execution; the other four conditions traversed real triangle branches. Mixed memory’s 14/14 does not isolate gated triangle excerpts as the cause of correct answers.",
+        "Triangle-only failures were a fabricated Unicode literal/citation and a file write to an incorrect absolute path. The host denied the write and the required file was absent. The other 12 assertions passed. The boundary sequence recovered the older merged event but failed the long-source-tail value. Explicit recall separately recovered both boundaries and the exact literal with original citations, 3/3. Those assisted successes do not replace automatic failures.",
+        "A reporting audit recovered 24 bank JSON records omitted because terminal prompts prefixed them with you> and bound completed chats to their preceding banks. It also separated interrupted work from completed rounds. This corrected execution accounting without rerunning inference or changing behavioral scores. Original reports and logs remain retained."
+      ]
+    },
+    {
+      "heading": "5. Causal controls, retained failures and continuity",
+      "paragraphs": [
+        "An actual-checkpoint probe installed a native 20-record bank containing one triangle. Both left and right branches produced their exact expected traces. Clearing only the resident record bank changed a valid open into INVALID; restoring the bank recovered its original trace and digest. Checkpoint weights were not written. In a separate real Spine negative control, clearing the bank likewise returned an invalid trace. Rust rejected it before language completion, with zero accepted completions; restoration recovered byte-exact bank contents and the source heart stayed unchanged. These controls establish dependence on resident navigation state and enforcement of the application gate.",
+        "The first application attempt remains a genuine failure record. Its triangle-only sequence recorded seven passes and three failures among ten completed assertions, then stopped before completing the 14-assertion sequence. Preference had the correct value with a wrong citation, the literal/citation was fabricated, and file writing exhausted the action budget. Gating was verified across 24 completed rounds, 72 associated banks, 105 repeated triangle installations and 60 branch commands. A separate first boundary run completed 1/2; the mixed attempt was stopped without a completed comparison.",
+        "The next remember request failed because the installer reapplied a triangle-creation cosine threshold after native centroids had evolved. Native structural validation permits such retained triangles. The repaired native backend checks structure and finite vector shape/norm without reapplying that creation-time threshold; the standalone loader is unchanged. There was no fallback. Corrected runs used fresh test copies, and acceptance now also requires full run completion. Initial failures and original lower parser counts remain preserved.",
+        "The GPU interruption test asks a new question after interruption; it does not resume the interrupted essay. The restart assertion checks the persisted value and a 64-character hexadecimal identifier without independently matching that identifier to its original event. Actual harness checkpoint serialization and sidecar persistence were instead CPU-tested. Focused validation passed 83 checks: 24 backend, 26 CLI triangle, one message serialization, 28 lifecycle and four auxiliary/onboarding/regression checks.",
+        "The corrected matrix’s guard exited zero, with peak charged host memory 3.857 GiB, maximum recorded reserved GPU memory 11.088 GiB, and no high/max/OOM events. Limits were a 24 GiB host cap, 20 GiB throttle, no swap and 16 GiB available-memory reserve. These counters exclude some driver and shared-cache allocation. The earlier suite was intentionally stopped after the compatibility failure (exit −15), with a 4.254 GiB charged host peak and no OOM event."
+      ],
+      "paragraphs_after": []
+    },
+    {
+      "heading": "6. Historical retention and full-history controls",
+      "paragraphs": [
+        "Earlier standalone retention used real MiniLM embeddings, encrypted storage, signed events, native compaction/ranking/rehydration and CLI evidence rendering. Eight fixed questions were repeated at three history lengths. Generation was greedy, with fresh language caches and a 180-token answer limit. The deterministic corpus included 16 repeating distraction templates; logical session labels were threads, with three actual store-reopen checkpoints."
+      ],
+      "table": {
+        "caption": "Table 2. Historical standalone retention. Eight questions repeated at three lengths are 24 pairs, not 24 independent tasks.",
+        "headers": [
+          "Content tokens",
+          "Events",
+          "Session labels",
+          "Compiled + sources",
+          "Recent 2K",
+          "Oracle"
+        ],
+        "rows": [
+          [
+            "4,274",
+            "26",
+            "2",
+            "8/8",
+            "1/8",
+            "8/8"
+          ],
+          [
+            "32,812",
+            "140",
+            "6",
+            "8/8",
+            "1/8",
+            "8/8"
+          ],
+          [
+            "131,215",
+            "534",
+            "23",
+            "8/8",
+            "1/8",
+            "8/8"
+          ]
+        ]
+      },
+      "paragraphs_after": [
+        "Retrieved prompts contained 572–901 tokens. The recent baseline’s 2,048-token source-body budget became about 2,660 prompt tokens with metadata; its sole success was abstention. Oracle labels selected upper-bound evidence and did not guide native routing. BF16 traces and rendered evidence matched native routes and CLI output across all 24 pairs. Natural-language compaction produced only one triangle per history size. A separate designed-vector fixture exercised 32 nodes, 31 triangles, depth eight and 32 native walks on CPU/B70, testing traversal geometry rather than semantic quality.",
+        "Two historical source-boundary cases failed despite intact stored evidence: an older binding event was omitted by the two-recent-event renderer, and a required long-event tail lay beyond 1,000 characters. Each scored 0/1 with triangle excerpts and 1/1 with oracle/full sources. The later application boundary scores have a different evaluation context and do not erase these failures.",
+        "Historical valid raw full-history controls also passed 8/8 at actual prompt lengths of 6,435, 42,742 and 167,780 tokens. The largest finite replay retained every prompt position in all eight full-attention caches and generated 746 answer tokens. A fresh process restored that completed cache and reproduced answer bytes and token IDs exactly. This verifies restart from saved state, not an independent full-prefill replication.",
+        "Two early large-context attempts produced no complete answers. Another run developed NaN language recurrence and logits, emitting 1,400 punctuation tokens; its mechanical 0/8 is not an interpretable forgetting score. A distinct checked replay resumed a finite 65,536-token checkpoint and passed 8/8, but extra finite checks also changed synchronization. The original numerical trigger remains unresolved. Raw controls answered all questions together, whereas retrieval answered them separately; these runs do not establish a matched speed advantage."
+      ]
+    },
+    {
+      "heading": "7. Interpretation and availability",
+      "paragraphs": [
+        "Historical ordinary chat installed an empty compiled forest: mixed memory scored 14/14, triangle-only 11/14, boundaries 0/2 mixed and 1/2 triangle-only, and explicit recall 3/3. Those results measured native memory and model/harness behavior. The new 12/14 triangle-only score cannot be treated as causal or statistical improvement over 11/14. A still earlier provider trial used a richer source scan and native fallback beyond resident capacity; its success does not validate the current bounded gate.",
+        "Exact-value grounding also remains unresolved. In the historical Unicode diagnostic, the model invented ZIRCON_RECOVERY_Ω instead of Δ-sable_47/µ, but extraction returned zero claims, bypassing NLI and repair. Forced incorrect extraction gave entailment coverage 0.01531738 and requested repair; forcing the correct literal also requested repair, with coverage 0.00584489. Extraction alone therefore does not establish reliable exact-string verification. The source was only 108 characters, so comparing 1,000-character and full-event windows could not test truncation. [Rust Spine issue #40](https://github.com/Jaredcastorena/Rust-spine/issues/40) remains deferred in this evaluated snapshot.",
+        "The relevant “blurring” concerns where memory-control computation executes: a symbolic navigator runs through neural-network operations and its working topology occupies model recurrence. Conversation text has not been absorbed into language-model weights. Original text, semantic selection and compaction remain external. Small prompts and compact handles coexist with substantial storage: the initial dense navigation snapshot occupied 10,815,512 bytes and the merged checkpoint approximately 9.79 GiB, in addition to stored source events.",
+        "The supported result is persistent, bounded navigation that reconnects a fresh language context to selected original evidence, now enforced in an opt-in real application path. It does not establish unlimited or lossless context compression, autonomous recovery, reliable grounding or superior retrieval from compilation itself. No matched ablation shows an answer-quality advantage over running the same navigation policy on the host. Source budgets, capacity bounds and language failures remain consequential.",
+        "The code, [current results](https://github.com/Jaredcastorena/qwenmem-spine/blob/main/docs/results.md), validation report and this paper are included in [qwenmem-spine](https://github.com/Jaredcastorena/qwenmem-spine). The machine-readable November 3 evidence retains its measurement-time source hashes and uncommitted status; it is a historical run record. A November 4 test-runner fix enforces failure exits for shortened runs whose navigation proof fails; the independently verified measurements and scores above are unchanged. Matching weights remain at [Jared1728/qwenmem-spine](https://huggingface.co/Jared1728/qwenmem-spine/tree/f69dbcfe5a7cebea1c287f6f1d76c8e90b2c9a98), revision f69dbcfe5a7cebea1c287f6f1d76c8e90b2c9a98. Repository access depends on permissions and visibility. This note has not been submitted to arXiv. New code uses MIT; derivative model weights retain Apache-2.0."
+      ],
+      "paragraphs_after": []
+    }
+  ]
+}

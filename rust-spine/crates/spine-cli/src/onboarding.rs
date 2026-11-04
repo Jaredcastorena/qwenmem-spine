@@ -266,13 +266,38 @@ pub async fn generate_turn(
     transcript: &[Message],
     answer_count: usize,
 ) -> AnyResult<OnboardingTurn> {
+    generate_turn_with_internal_context(provider, transcript, answer_count, false).await
+}
+
+pub async fn generate_turn_with_internal_context(
+    provider: &dyn ModelProvider,
+    transcript: &[Message],
+    answer_count: usize,
+    internal_context: bool,
+) -> AnyResult<OnboardingTurn> {
     let constraint = constraint_for(answer_count);
-    let first = request_turn(provider, transcript, answer_count, constraint, false).await?;
+    let first = request_turn(
+        provider,
+        transcript,
+        answer_count,
+        constraint,
+        false,
+        internal_context,
+    )
+    .await?;
     if valid_for_constraint(&first, constraint) {
         return Ok(finalize_turn(first, transcript, constraint));
     }
 
-    let repaired = request_turn(provider, transcript, answer_count, constraint, true).await?;
+    let repaired = request_turn(
+        provider,
+        transcript,
+        answer_count,
+        constraint,
+        true,
+        internal_context,
+    )
+    .await?;
     Ok(finalize_turn(repaired, transcript, constraint))
 }
 
@@ -282,12 +307,23 @@ async fn request_turn(
     answer_count: usize,
     constraint: TurnConstraint,
     repair: bool,
+    internal_context: bool,
 ) -> AnyResult<OnboardingTurn> {
     let mut messages = Vec::with_capacity(transcript.len() + 2);
-    messages.push(Message::new(
+    let mut system = Message::new(
         MessageRole::System,
         onboarding_prompt(answer_count, constraint, repair),
-    ));
+    );
+    if internal_context {
+        // Onboarding has no automatic recall. An explicit empty packet preserves
+        // that policy while satisfying the internal provider's source gate.
+        system.content.push_str("\n\n");
+        system.content.push_str(crate::triangle_context::MARKER);
+        system.compiled_memory = Some(serde_json::json!({
+            "schema": 1, "context": {}, "sources": [], "banks": []
+        }));
+    }
+    messages.push(system);
     messages.extend_from_slice(transcript);
     if transcript.is_empty() {
         messages.push(Message::new(
@@ -854,6 +890,93 @@ mod tests {
         let turn = generate_turn(&provider, &transcript, 1).await.unwrap();
         assert!(!turn.complete);
         assert!(turn.reply.contains("challenge"));
+    }
+
+    #[tokio::test]
+    async fn onboarding_internal_context_is_explicitly_empty_on_initial_and_repair_requests() {
+        struct CapturingProvider {
+            turns: Mutex<VecDeque<ModelTurn>>,
+            requests: Mutex<Vec<CompletionRequest>>,
+        }
+
+        #[async_trait]
+        impl ModelProvider for CapturingProvider {
+            async fn complete(
+                &self,
+                request: CompletionRequest,
+            ) -> spine_runtime::Result<ModelTurn> {
+                self.requests.lock().unwrap().push(request);
+                Ok(self.turns.lock().unwrap().pop_front().unwrap())
+            }
+        }
+
+        let transcript = vec![Message::new(MessageRole::User, "Keep it concise")];
+        for internal_context in [false, true] {
+            let provider = CapturingProvider {
+                turns: Mutex::new(VecDeque::from([
+                    model_turn(
+                        r#"{"reply":"Great, we're all set.","complete":true,"profile":"brief"}"#,
+                    ),
+                    model_turn(
+                        r#"{"reply":"When should I challenge your assumptions?","complete":false,"profile":null}"#,
+                    ),
+                ])),
+                requests: Mutex::new(Vec::new()),
+            };
+            let turn = if internal_context {
+                generate_turn_with_internal_context(&provider, &transcript, 1, true)
+                    .await
+                    .unwrap()
+            } else {
+                // The existing public entrypoint must retain its exact old requests.
+                generate_turn(&provider, &transcript, 1).await.unwrap()
+            };
+            assert!(!turn.complete);
+            assert!(turn.reply.contains("challenge"));
+            let requests = provider.requests.lock().unwrap();
+            assert_eq!(requests.len(), 2, "fixture must exercise repair");
+            for (index, request) in requests.iter().enumerate() {
+                let system = &request.messages[0];
+                let original = onboarding_prompt(1, constraint_for(1), index == 1);
+                assert_eq!(system.role, MessageRole::System);
+                assert_eq!(request.messages[1..], transcript);
+                assert!(request.tools.is_empty());
+                assert!(!request.allow_tool_calls);
+                assert!(
+                    request.messages[1..]
+                        .iter()
+                        .all(|m| m.compiled_memory.is_none())
+                );
+                let markers: usize = request
+                    .messages
+                    .iter()
+                    .map(|message| {
+                        message
+                            .content
+                            .matches(crate::triangle_context::MARKER)
+                            .count()
+                    })
+                    .sum();
+                if internal_context {
+                    assert_eq!(markers, 1);
+                    assert_eq!(
+                        system.content,
+                        format!("{original}\n\n{}", crate::triangle_context::MARKER)
+                    );
+                    assert_eq!(
+                        system.compiled_memory,
+                        Some(serde_json::json!({
+                            "schema": 1, "context": {}, "sources": [], "banks": []
+                        }))
+                    );
+                } else {
+                    assert_eq!(markers, 0);
+                    assert_eq!(system.content, original);
+                    assert!(system.compiled_memory.is_none());
+                }
+            }
+        }
+        assert!(transcript[0].compiled_memory.is_none());
     }
 
     #[tokio::test]

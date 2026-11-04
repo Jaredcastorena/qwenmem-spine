@@ -239,8 +239,17 @@ pub fn rehydrate_triangle_context_for_goal(
     query: &Embedding,
     goal: Option<&Embedding>,
 ) -> spine_runtime::Result<String> {
+    rehydrate_triangle_context_handoff(heart, query, goal, false).map(|(text, _)| text)
+}
+
+pub fn rehydrate_triangle_context_handoff(
+    heart: &SpineHeart,
+    query: &Embedding,
+    goal: Option<&Embedding>,
+    compiled: bool,
+) -> spine_runtime::Result<(String, Vec<serde_json::Value>)> {
     let Some(state) = heart.cognition()? else {
-        return Ok("[]".into());
+        return Ok(("[]".into(), Vec::new()));
     };
     let canonical = heart.events_canonical()?;
     let events: BTreeMap<_, _> = canonical
@@ -249,6 +258,7 @@ pub fn rehydrate_triangle_context_for_goal(
         .collect();
     let mut seen_nodes = BTreeSet::new();
     let mut result = Vec::new();
+    let mut banks = Vec::new();
     for root in state.triangles.ranked_roots(&state.dcmdb, query, goal, 3)? {
         let rehydrated = heart.rehydrate_context(
             root.handle,
@@ -260,6 +270,12 @@ pub fn rehydrate_triangle_context_for_goal(
                 max_tokens: 1_024,
             },
         )?;
+        if compiled
+            && let Some(bank) =
+                crate::triangle_context::bank(&state, root.handle, query, &rehydrated.coordinates)?
+        {
+            banks.push(bank);
+        }
         for coordinate in rehydrated.coordinates {
             if !seen_nodes.insert(coordinate.node_id) {
                 continue;
@@ -281,12 +297,12 @@ pub fn rehydrate_triangle_context_for_goal(
                     }));
                 }
                 if result.len() >= 12 {
-                    return Ok(serde_json::to_string(&result)?);
+                    return Ok((serde_json::to_string(&result)?, banks));
                 }
             }
         }
     }
-    Ok(serde_json::to_string(&result)?)
+    Ok((serde_json::to_string(&result)?, banks))
 }
 
 struct MemoryStatsTool {

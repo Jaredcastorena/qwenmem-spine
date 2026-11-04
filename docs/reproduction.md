@@ -12,6 +12,7 @@ clean-machine installation or a promise of identical language-model outputs.
 | Try navigation without a language-model download | [Small CPU controller](#small-cpu-controller) |
 | Generate synthetic hearts and run native checks | CPU setup, then [native build and fixtures](#native-build-and-synthetic-fixtures) |
 | Chat with the modified model | XPU setup, [native build](#native-build-and-synthetic-fixtures), [checkpoint download or build](#merged-checkpoint-download-or-build), [guarded execution](#guarded-intel-full-model-execution), then [full Rust agent](#full-rust-agent-and-current-acceptance) |
+| Exercise internal triangles in real Spine chat | The same full-agent prerequisites, then [internal context acceptance](#internal-context-acceptance) |
 | Repeat retrieval and restart experiments | All full-model prerequisites, then [standalone retention](#standalone-retention-and-cross-process-state) |
 | Inspect the large-context diagnostic | All full-model prerequisites, then [raw full-history control](#raw-full-history-control) |
 
@@ -218,10 +219,80 @@ Generate the synthetic native fixtures first, then use new output directories:
 ```
 
 `--force-recall` changes the question and labels the report as an explicit-recall
-probe. Keep that score separate. Current normal chat installs an empty compiled
-forest and uses native context/tools; these commands do not test the unfinished
-bounded internal-controller handoff. The recorded outcomes and exact failure
-categories are in [results](results.md).
+probe. Keep that score separate. Without `--triangle-internal-context`, these
+commands install an empty compiled forest and exercise native context/tools.
+These are the commands for the first historical chat test battery; its outcomes
+and failure categories are in [results](results.md).
+
+### Internal context acceptance
+
+This revision includes the internal-context implementation tested in the second
+chat battery on November 3, 2026. Build the included Rust source and use the same
+unchanged merged checkpoint. Internal context remains opt-in; enable it for
+interactive chat with:
+
+```bash
+./scripts/spine-local.sh --terminal --triangle-internal-context
+# Withhold automatic hybrid recall as a separate experimental control:
+./scripts/spine-local.sh --terminal --triangle-internal-context --triangle-context-only
+```
+
+`--triangle-internal-context` requires `--triangle-backend`; the convenience
+launcher supplies it. The option changes the route from native-selected triangle
+context to language generation. Rust exports complete original root topology,
+then checks compiled checkpoint traces before releasing the originally selected
+source excerpts. The native source budgets and explicit memory tools remain in
+effect. A complete selected root closure that exceeds 64 records or depth eight
+is an error, with no native fallback.
+
+After generating the synthetic fixtures, use fresh output directories for each
+run. Run one guarded model job at a time:
+
+```bash
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --triangle-context-only --query cancelled \
+  --require-triangle-branch --output artifacts/acceptance/internal-pilot
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --triangle-context-only --require-triangle-branch \
+  --output artifacts/acceptance/internal-triangle-only
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --require-triangle-branch \
+  --output artifacts/acceptance/internal-native-mixed
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --triangle-context-only --boundaries --require-triangle-branch \
+  --output artifacts/acceptance/internal-boundaries
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --triangle-context-only --boundaries --force-recall \
+  --require-triangle-branch --output artifacts/acceptance/internal-explicit-boundaries
+./scripts/guarded-python.sh scripts/spine_end_to_end.py \
+  --triangle-internal-context --triangle-context-only --query literal --force-recall \
+  --output artifacts/acceptance/internal-explicit-literal
+```
+
+The runner writes behavioral assertions and a separate `internal_navigation`
+proof in `results.json`, plus bank/completion events in
+`internal-navigation-events.json`. Inspect both: a passed trace does not imply a
+correct answer, and an answer alone does not demonstrate active internal memory.
+Require `run_completed=true` before reporting a full-sequence score. A completed
+run with behavioral failures exits nonzero and still preserves its evidence;
+an interrupted run is not a completed score.
+Navigation totals group banks with completed model rounds; separate counters
+retain work executed before an interrupted request stopped. The included
+aggregate records a reporting-only correction for terminal-prefixed JSON lines
+and preserves the original report/log identities.
+`--require-triangle-branch` additionally requires installed triangle records and
+actual branch commands; leaf-only navigation cannot satisfy that check. Empty
+native selection is a valid `no_memory` runtime case, not proof of navigation.
+The branch pilot selects `cancelled` from the fresh native fixture. The runner's
+`--pilot` shortcut instead selects the first question, which may use only leaf
+records and should be treated as a smoke test without a branch requirement.
+Keep assisted probes separate from automatic results. The measured literal
+recall probe used leaf-only banks, so its command deliberately omits the branch
+requirement. The [internal-context validation record](internal-context-validation.md)
+and [November 3 aggregate](../evidence/internal-context-20261103.json) describe the
+completed runs, actual-checkpoint negative controls and their limits.
+
+### NLI diagnostic
 
 The CPU NLI reproduction is:
 

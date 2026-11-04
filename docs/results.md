@@ -1,19 +1,93 @@
 # Recorded results and failure record
 
-Measurements span October 31–November 2, 2026. This report separates current
-normal-chat behavior, earlier compiled-navigation experiments and superseded
-provider trials. Aggregate source data are included in
+Measurements span October 31–November 3, 2026. The first historical chat test
+battery ran with `--triangle-internal-context` off and an empty model navigation
+forest. The second battery, measured November 3, enabled the flag and exercised
+compiled navigation in real chat. This revision includes both batteries; default
+chat still uses an empty forest unless internal context is explicitly enabled.
+Earlier standalone navigation experiments and superseded provider trials are
+reported separately. Aggregate source data are included in
+[internal-context-20261103.json](../evidence/internal-context-20261103.json),
 [current-harness.json](../evidence/current-harness.json),
 [retention-and-raw-controls.json](../evidence/retention-and-raw-controls.json),
 [nli-diagnostic.json](../evidence/nli-diagnostic.json) and
 [provenance.json](../evidence/provenance.json). The tables report measured runs;
 they do not promise identical regenerated model outputs or a tested clean install.
 
-## Current native harness
+## Opt-in internal context
 
-All runs use the actual unchanged merged checkpoint, real `spine chat`, NLI and
+The included `--triangle-internal-context` path requires compiled checkpoint
+navigation to authorize the native-selected source rows before language
+generation. Its measured evidence is recorded separately in
+[internal context validation](internal-context-validation.md). The historical
+scores below are preserved and are not relabeled as internal-navigation results.
+
+The actual-checkpoint residency probe on November 3 passed: both branches of a
+real native triangle produced their exact expected traces; zeroing the resident
+bank produced `INVALID`, and restoring the bank recovered the original trace.
+It used the unchanged merged checkpoint on the B70 and wrote no checkpoint
+weights. This establishes resident-state execution, not full-agent chat success.
+
+The corrected completed runs used the unchanged checkpoint and the same native
+selection/excerpt budgets:
+
+| Internal-context condition | Strict behavioral score | Completed model rounds | Branch commands |
+| --- | ---: | ---: | ---: |
+| Native mixed memory | 14/14 | 31 | 79 |
+| Triangle-only automatic memory | 12/14 | 27 | 59 |
+| Triangle-only boundaries | 1/2 | 5 | 4 |
+| Explicit recall of boundaries | 2/2 | 4 | 4 |
+| Explicit recall of literal | 1/1 | 3 | 0 |
+
+All 70 completed rounds passed the source gate and actual-checkpoint execution
+checks, with 210 bank executions and 267 repeated triangle-record installations
+associated with those completed rounds. Two interrupted requests executed six
+additional banks, 49 triangle-record installations and 15 branch commands;
+these are excluded from the completed-round totals. An audit corrected omitted
+prompt-prefixed log records and the original mixed counting scope, without
+changing inference or behavioral scores. Original reports and logs are retained.
+Language generation preserved navigation state, and every source fixture stayed
+unchanged. The literal recall probe used leaf-only banks; it is not evidence of
+triangle branching. The other four conditions executed real branches. Mixed mode
+also supplies native hybrid recall, so its 14/14 does not isolate gated triangle
+excerpts as the source of correct answers.
+
+The triangle-only sequence failed on a fabricated literal/citation and a file
+write to an incorrect absolute path. The host denied the write, and the required
+file was absent. File read, fact acknowledgement, new-process recall,
+interruption and subsequent inference passed. The boundary run recovered the
+older merged event but failed the long-source-tail value. Explicit recall
+recovered both boundaries and the literal with original citations, for a separate
+3/3. Assistance changes the task and does not erase the automatic failures.
+The original restart/interruption scoring limits below still apply.
+
+A separate full-agent negative control cleared the resident record bank. The
+actual prefix returned an invalid trace, and Rust rejected it before language
+completion, with zero accepted completions. Record-bank bytes were restored
+exactly and the source heart stayed unchanged. Together with the standalone
+causal probe, this demonstrates active resident-state navigation and a source
+gate that stops on failure. It does not establish reliable language answers.
+See the [detailed validation](internal-context-validation.md) for CPU checks,
+resource evidence and limits.
+
+These are single runs with host-modulated temperature 0.1. Installation counts
+include repeated loads, and the small synthetic assertion set does not establish
+a population accuracy estimate or a statistically reliable change from earlier
+runs.
+
+The earlier first full-agent attempt verified compiled source gating across 24
+completed triangle-only model rounds, including 60 branch commands, but stopped
+after 10 of 14 operational assertions because the backend rejected a
+native-valid triangle after centroid changes. Seven recorded assertions passed
+and three failed; this is not a completed 14-check score. A separate first
+boundary run scored 1/2. The [retained attempt record](internal-context-validation.md#retained-first-attempt)
+preserves the failure and distinguishes verified navigation from behavior.
+
+## Historical native harness: empty navigator
+
+These runs used the actual unchanged merged checkpoint, real `spine chat`, NLI and
 native tools with newly created test copies of synthetic stores. The provider
-adds no source scan and installs an empty internal forest. Thus these evaluate
+added no source scan and installed an empty internal forest. Thus they evaluate
 the model/harness connection and native memory behavior, not active compiled
 navigation during chat.
 
@@ -155,8 +229,8 @@ An earlier full-application provider owned a source-window scan and installed
 whole exported forests. It passed 14 operational assertions and both boundary
 questions, including 8/8 primary answers, real tools, persisted-fact recall and
 interruption recovery. This source-scan path was subsequently removed. Its
-successes do not describe the current provider or solve the current bounded
-internal-handoff problem.
+successes do not describe the default provider or validate the new bounded
+internal-context handoff.
 
 That main run had 21 model rounds: 15 used compiled navigation and six used
 explicit native fallback after exceeding 64 resident records. Prompts were

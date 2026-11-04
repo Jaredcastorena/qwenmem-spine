@@ -42,6 +42,21 @@ class CircuitSession:
                     result[f"{i}.{name}"] = value.detach().cpu().contiguous().clone()
         return result
 
+    def state_digest(self):
+        """Identify actual prefix cache tensors, including their names and layouts."""
+        state = self._state()
+        if not state:
+            raise RuntimeError("Missing navigation state")
+        digest = hashlib.sha256()
+        for key, value in sorted(state.items()):
+            layout = json.dumps([key, str(value.dtype), list(value.shape)],
+                separators=(",", ":")).encode()
+            payload = tensor_bytes(value)
+            for part in (layout, payload):
+                digest.update(len(part).to_bytes(8, "big"))
+                digest.update(part)
+        return digest.hexdigest()
+
     def save(self, path):
         import torch
         from safetensors.torch import save_file

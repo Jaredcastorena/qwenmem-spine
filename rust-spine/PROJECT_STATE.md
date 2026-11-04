@@ -6,6 +6,31 @@ fresh validation of the qwenmem snapshot. See the snapshot's [results](../docs/r
 and [reproduction guide](../docs/reproduction.md) for integration-specific evidence.
 Standard Spine does not require Python; the optional local-model backend does.
 
+## Included qwenmem validation — November 3, 2026
+
+This revision includes the opt-in `--triangle-internal-context` implementation
+and its [validation record](../docs/internal-context-validation.md). The first
+historical chat battery left the flag off; the November 3 second battery enabled
+it. Default chat remains the historical empty-navigator path. Native selection,
+triangle construction, compaction and source storage remain on the host; the
+compiled model navigates complete selected closures bounded to 64 records and
+depth eight per bank, with explicit failure above those bounds and no paging.
+
+The corrected B70 matrix scored mixed memory 14/14, triangle-only automatic
+memory 12/14, boundaries 1/2 and separately instructed recall 3/3. Its 70
+completed model rounds used 210 banks, 267 repeated triangle-record installations
+and 146 branch commands. Six interrupted banks, 49 installations and 15 branches
+are reported separately. The full-chat zero-bank control blocked completion;
+the standalone zero/restore probe recovered the exact trace and bank bytes.
+
+The [aggregate](../evidence/internal-context-20261103.json) also records 83
+focused CPU checks, a 3.857 GiB charged-host peak and 11.088 GiB maximum reserved
+GPU memory. These are dated integration results, not reruns of the workspace or
+cross-platform release checks below. Literal/citation fabrication, a denied
+write to the wrong path, long-source-tail recovery and the deferred NLI
+[issue #40](docs/known-limitations.md) remain limitations. Historical
+empty-forest scores and unsuccessful first attempts remain preserved.
+
 ## v0.3.2 desktop audit
 
 - [Behavior map and acceptance](docs/desktop-parity-audit.md): 261 Rust tests,

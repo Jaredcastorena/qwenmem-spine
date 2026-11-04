@@ -80,6 +80,8 @@ class MergedRunner(CircuitSession):
         self.tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True,
             trust_remote_code=False, fix_mistral_regex=False)
         self.circuit = self._build_circuit(forest)
+        # Process-local work counter; reset/restore never rewind executed prefix ticks.
+        self.navigation_ticks = 0
         self.reset_session()
 
     def _build_circuit(self, forest):
@@ -121,10 +123,22 @@ class MergedRunner(CircuitSession):
             for layer in self.model.model.layers[:self.meta["chip_layers"]]:
                 h = layer(h, position_embeddings=None, attention_mask=None,
                     position_ids=None, past_key_values=self.cache)
+            self.navigation_ticks += 1
             code = h[0, -1, self.meta["code_dims"]].float()
             if not bool(torch.isfinite(code).all()) or not bool(torch.all(code.abs() == 4096)):
                 raise RuntimeError("Nonexact circuit output")
             return sum(int(value > 0) << i for i, value in enumerate(code.tolist()))
+
+    def execution_snapshot(self):
+        return {"ticks": self.navigation_ticks, "state": self.state_digest()}
+
+    def execution_attestation(self, before):
+        after = self.execution_snapshot()
+        return {"engine": "merged_checkpoint_prefix", "prefix_layers": self.meta["chip_layers"],
+            "ticks_before": before["ticks"], "ticks_after": after["ticks"],
+            "state_before": before["state"], "state_after": after["state"],
+            "resident_records": len(self.forest.records),
+            "resident_triangles": len(self.forest.data["triangles"])}
 
     def answer(self, question, evidence, *, max_tokens=160):
         import torch
@@ -183,7 +197,7 @@ class MergedRunner(CircuitSession):
             raise ValueError("Chat exceeds model context")
         self.model.set_attn_implementation("sdpa")
         cache = make_cache(self.model.config, len(prompt) + max_tokens)
-        before = self._state()
+        before = self.execution_snapshot()
         output = []
         kernels = (sdpa_kernel([SDPBackend.FLASH_ATTENTION, SDPBackend.EFFICIENT_ATTENTION,
             SDPBackend.OVERRIDEABLE]) if self.device == "xpu" else nullcontext())
@@ -209,13 +223,13 @@ class MergedRunner(CircuitSession):
                 output.append(token)
                 if index + 1 < max_tokens:
                     logits = self._text_step(token, cache, len(prompt) + index, final=True)
-            after = self._state()
-            if not all(torch.equal(t, after[k]) for k, t in before.items()):
+            if self.execution_snapshot() != before:
                 raise RuntimeError("Language generation changed navigation state")
         report = {"answer": self.tokenizer.decode(output, skip_special_tokens=True),
             "prompt_tokens": len(prompt), "answer_tokens": len(output),
             "truncated": len(output) == max_tokens, "navigation_unchanged": True,
-            "weights_sha256": self.weight_id, "sampling": {"temperature":temperature}}
+            "weights_sha256": self.weight_id, "sampling": {"temperature":temperature},
+            "forest_sha256": self.forest.digest, "execution": self.execution_attestation(before)}
         if self.device == "xpu":
             report["gpu_reserved_bytes"] = torch.xpu.max_memory_reserved()
         return report

@@ -62,12 +62,10 @@ class Forest:
                 raise ValueError("Triangle requires apex, left and right addresses")
             if triangle["apex"] not in self.nodes or triangle["left"] == triangle["right"]:
                 raise ValueError("Invalid apex or duplicate branch")
+            # Native construction checks coherence. Centroids can evolve afterward
+            # without invalidating the retained triangle's structural identity.
             for side in ("left", "right"):
-                branch = triangle[side]
-                check(branch)
-                coordinate = branch if branch in self.nodes else self.triangles[branch]["apex"]
-                if cosine(self.nodes[triangle["apex"]]["vector"], self.nodes[coordinate]["vector"]) < 0.8:
-                    raise ValueError("Apex is not coherent with both branches")
+                check(triangle[side])
             visiting.remove(address)
             visited.add(address)
 
@@ -81,8 +79,3 @@ class Forest:
                 triangle = self.triangles[address]
                 self.records[slot] = Record(True, *(self.slots[triangle[k]] for k in ("apex", "left", "right")))
         self.digest = hashlib.sha256(json.dumps(self.data, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-
-
-def cosine(a, b):
-    left, right = math.sqrt(sum(x*x for x in a)), math.sqrt(sum(y*y for y in b))
-    return sum((x/left)*(y/right) for x, y in zip(a, b))

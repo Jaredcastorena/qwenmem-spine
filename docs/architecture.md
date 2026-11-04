@@ -15,8 +15,8 @@ commands retain `triangle_memory`/`triangle` terminology for source compatibilit
 | Native retrieval | Rust code that ranks memories, traverses the native hierarchy and selects source text for a prompt or tool result. |
 | Navigation snapshot | Saved controller state tied to a particular forest and checkpoint; distinct from the heart and the language KV cache. |
 
-The central distinction is between the standalone compiled-navigation path and
-the current full-agent path. The diagrams below show them separately.
+Standalone navigation, default chat and opt-in internal-context chat have
+different execution boundaries. The diagrams below show those paths separately.
 
 ## Compiled navigation path
 
@@ -33,8 +33,8 @@ flowchart LR
     Q --> L
 ```
 
-This is the standalone diagnostic/retention path. It is not the current ordinary
-chat path shown later in this document.
+This is the standalone diagnostic/retention path. The full-agent paths below
+add the normal harness, tools, journaling and host grounding.
 
 The [protocol](../src/triangle_memory/protocol.py) has 272 tokens: open, move,
 alternate and apex ranges of 64 addresses each; eight saved-route tokens; and
@@ -54,6 +54,15 @@ triangles. The native diagnostic installer
 also rejects stored depth above eight even if a selected walk is short. The
 generic Python loader can install deeper topology; its traversal still stops
 after eight descents, as the depth-62 boundary test demonstrates.
+
+The native backend has a different coherence boundary: Rust checks coherence
+when creating triangles, while retained triangles can survive later centroid
+changes. Its [installer](../rust-spine/backends/triangle/triangle_backend/forest.py)
+validates the retained topology, provenance, matching vector dimensions and
+finite nonzero vector norms. It does not reapply the creation-time cosine
+threshold to current centroids. The standalone research loader above is
+unchanged. The first internal-context run exposed this distinction; see the
+[retained attempt](internal-context-validation.md#retained-first-attempt).
 
 The [circuit](../src/triangle_memory/circuit.py) uses five compiled layers and
 five logical heads: resident records plus mutable traversal state. The
@@ -103,7 +112,7 @@ navigation. Clearing only resident records made open return `INVALID`; restoring
 state recovered the records and cursor. This demonstrates recurrent-state
 residency, not semantic compaction or a full-model language benchmark.
 
-## Current full agent path
+## Default full agent path
 
 ```mermaid
 flowchart TD
@@ -124,20 +133,80 @@ normal `ModelProvider` interface and a persistent Python child running the
 [backend](../rust-spine/backends/triangle/server.py). It has no heart or encoder
 handle and adds no independent evidence retrieval. Native context, explicit
 memory tools and the model's ordinary language reasoning remain active even
-though its compiled forest is empty. A bounded harness-selected internal
-installation is unfinished.
+though its compiled forest is empty. The opt-in handoff described below adds
+compiled navigation without giving the provider a source-store handle.
 
 Default chat includes native hybrid automatic recall. `--triangle-context-only`
 withholds that automatic recall text while retaining the task, bounded dialogue,
 plans, working state, tools, policy and native triangle excerpts. It means
 triangle-only *automatic memory retrieval*, not an otherwise empty context.
 
-Normal triangle context selects three roots and bounds each rehydration at depth
+Native triangle context selects three roots and bounds each rehydration at depth
 eight, fanout three, 16 coordinates and 1,024 estimated tokens. The renderer emits
 at most 12 excerpts of 1,000 characters. `heart_recall`/`search_memory` provide
 native recovery; current heart recall emits up to 3,000-character source
 prefixes and does not offer an event continuation offset. A 2,320-character
 boundary fixture fits that prefix, while arbitrary longer tails need not.
+
+## Opt-in internal context
+
+`--triangle-internal-context` requires the triangle backend. It preserves native
+query ranking, retained-goal selection, rehydration budgets and source rendering.
+It can be combined with `--triangle-context-only` to withhold automatic hybrid
+recall while retaining explicit memory tools.
+
+```mermaid
+flowchart TD
+    N[Native selection and bounded source rows] --> S[System-message sidecar]
+    N --> F[Complete topology of each selected root]
+    F --> B[Install one bounded bank without source bodies]
+    S --> P[Provider replays this request's banks]
+    B --> P
+    P --> C[Checkpoint compiled prefix executes commands]
+    C --> V[Rust verifies traces, addresses and execution evidence]
+    V -->|verified emitted apex IDs| E[Authorize original selected source rows]
+    E --> L[Fresh language prompt]
+    V -->|mismatch| X[Abort before language generation]
+```
+
+The [exporter](../rust-spine/crates/spine-cli/src/triangle_context.rs) includes
+each selected root's complete original closure: apex nodes, both branches and
+all descendants. It does not replace unvisited branches with invented leaves or
+flatten the whole durable forest. Every bank must fit 64 combined node/triangle
+records and stored depth eight; an oversized closure is an explicit error. A
+larger heart can contain several eligible bounded banks. These separate bank
+installations are host orchestration, not in-model paging.
+
+Topology records contain empty source text. The host keeps the original selected
+source rows separately in a system-message sidecar with the native retained
+context. That sidecar survives tool rounds, repair/finish requests and harness
+checkpoint serialization. It is not serialized into the language prompt. Each
+completion reinstalls and replays its own packet, so cancellation or child-process
+restart does not depend on a previous request's installed state.
+
+The provider independently predicts exact integer traces from each bank, checks
+the backend's installed address order and forest digest, and verifies the
+compiled-prefix execution record. Only actual returned apex IDs authorize the
+original selected source rows. Every selected row must be authorized before the
+provider expands the prompt marker into native context with those excerpts.
+Errors stop before language generation; there is no silent native fallback.
+An empty selection is recorded as `no_memory` and is not navigation evidence.
+
+The backend records actual prefix tick counts and navigation-state digests,
+alongside resident record/triangle counts. Language generation must preserve
+that state and tick count. These checks establish a gated execution path; they
+do not prove source entailment, semantic route quality or language-answer
+correctness. The [validation record](internal-context-validation.md) separates
+the corresponding evidence.
+
+The [November 3 aggregate](../evidence/internal-context-20261103.json) records 70
+completed full-agent rounds with verified gating and unchanged navigation state
+during language generation. A separate full-agent resident-bank fault produced
+an invalid prefix trace and stopped before language completion. These measured
+checks supplement the standalone resident-state proof; they do not move semantic
+ranking, compaction or source bodies into model weights.
+
+## Shared full-agent runtime
 
 Tool output uses Qwen's XML-style function/parameter format. Rust validates
 arguments and returns calls to the native registry; Python does not execute

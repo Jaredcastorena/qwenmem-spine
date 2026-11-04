@@ -1,6 +1,6 @@
 # qwenmem-spine: compiled navigation with durable source evidence
 
-Research measurements from October 31–November 2, 2026. This is a fixed,
+Research measurements from October 31–November 3, 2026. This is a fixed,
 unmaintained research snapshot. New code is MIT licensed; experimental intent
 does not restrict commercial reuse under the applicable licenses.
 
@@ -15,9 +15,13 @@ store a resident triangle forest and execute navigation commands. Rust Spine
 retains original events and chooses semantic routes. A host adapter resolves
 returned apex addresses into evidence for Qwen3.5-4B. A separate full-application
 integration shows that the merged checkpoint works through Spine's normal model
-provider and native tools. These two results have different execution scopes:
-the current normal-chat path uses an empty compiled navigation forest, and its
-bounded handoff to the internal controller is unfinished.
+provider and native tools. The first historical chat test battery ran without
+`--triangle-internal-context` and used an empty model navigation forest. This
+revision includes the second battery, measured November 3 with the flag enabled.
+That opt-in path connects native-selected root topology to the internal
+controller and gates the original source excerpts on verified apex output. Its
+[validation record](internal-context-validation.md) separates mechanism checks
+from full-agent behavioral results. Default chat retains the historical path.
 
 The contribution is an implemented and tested connection between a compiled
 navigation machine and a provenance-preserving source store. It does not show
@@ -41,9 +45,12 @@ nodes and triangles. It supports eight descents per opening, real apex emission,
 explicit leaves and errors, and eight indexed saved-alternate slots. The
 record table is read-only during navigation; cursor, pending child, saved alternatives
 and descent count mutate in Gated DeltaNet recurrent state. The host validates
-topology, provenance, address resolution, finite semantic coordinates and the
-apex/branch coherence constraint before installation. The research loader's
-coherence check has an [overflow edge case](known-limitations.md#numerical-behavior-and-resources)
+topology, provenance, address resolution and finite semantic coordinates before
+installation. Native Rust checks apex/branch coherence at triangle creation;
+retained triangles may survive later centroid changes. The native backend checks
+their structure and vector shape/norm without reimposing the creation-time
+cosine threshold. The unchanged standalone research loader still checks current
+coherence and has an [overflow edge case](known-limitations.md#numerical-behavior-and-resources)
 for extreme finite coordinates; the native backend rejects non-finite norms.
 
 Qwenputer compiles the program to five layers with five logical heads, 185 logical
@@ -87,7 +94,7 @@ still occupied the heart. Small prompt size therefore is one measured cost, not
 an overall compression ratio. [Results](results.md) include the timing and
 separate-process follow-up.
 
-## Three evaluation scopes
+## Evaluation scopes
 
 ### Standalone native-memory and compiled-navigation evaluation
 
@@ -135,9 +142,9 @@ one at a time. Their timing is not a matched throughput comparison. The study
 establishes a difference in language-context input, with external storage and
 runtime costs still present.
 
-### Current complete agent integration
+### Historical native-context agent integration
 
-The current provider consumes context and tools supplied by Spine. It does not
+The provider consumes context and tools supplied by Spine. It does not
 own a heart/encoder or run an extra source scan. The Rust harness owns tool
 permissions, action budgets, planning, transcript recovery, native recall and
 grounding. The model/provider connection is operational: native mixed-memory
@@ -145,7 +152,7 @@ tests pass 14/14 operational assertions, including real file tools, restart and
 interruption recovery. These operational assertions check a new recall after
 interruption, not resumption of the interrupted task. The restart check requires
 the persisted value and a 64-character hexadecimal identifier, without independently
-matching that identifier to the original event. See the [scoring scope](results.md#current-native-harness).
+matching that identifier to the original event. See the [scoring scope](results.md#historical-native-harness-empty-navigator).
 
 With automatic hybrid recall withheld, triangle-only automatic memory passes
 11/14. Failures include a fabricated exact literal, a repair that answers an
@@ -154,11 +161,70 @@ explicit-recall instructions recover both boundary sources and the literal,
 with original citations, for 3/3. These assisted results do not replace the
 unassisted failures.
 
-The current controls install an empty compiled forest. The completed connection
+These historical controls installed an empty compiled forest. The completed connection
 and native recall results therefore do not establish active compiled navigation
 inside ordinary chat. Earlier integration trials did use a provider-owned source
 scan and compiled traces; those historical results are recorded separately and
-are not acceptance of the current path.
+are not acceptance of the new internal-context path.
+
+### Native-selected internal context
+
+The opt-in handoff preserves native semantic ranking, rehydration and source
+budgets. For each selected root it exports the complete original closure,
+including both branches of every triangle, rather than constructing substitute
+leaves or exporting the whole heart. Every installed bank must fit the compiled
+64-record and depth-eight bounds. Source bodies remain outside the installed
+topology.
+
+The normal system message carries a durable sidecar containing the native
+selection and the original source rows. Before each language completion, the
+provider installs each bounded bank and runs its commands through the actual
+checkpoint's compiled prefix. Rust independently verifies the exact output
+traces, address order, forest digest and execution record. Only returned apex
+IDs authorize the selected source rows. The provider then renders those rows
+into a fresh language prompt; a failed gate aborts before generation. This moves
+bounded navigation into model state while leaving ranking, compaction and source
+storage with the native host.
+
+A November 3 B70 checkpoint probe exercised both branches of one real native
+triangle. Zeroing the resident bank changed an otherwise valid open to
+`INVALID`; exact restoration recovered the original trace. This is a causal
+check on resident-state navigation. It does not, by itself, establish that the
+full Spine tool loop uses the handoff or that its language answers are correct.
+Those claims require the separate application results recorded in
+[internal context validation](internal-context-validation.md).
+
+The repaired internal triangle-only application sequence completed 12/14
+operational assertions. All 27 completed model rounds passed the navigation
+gate, including 59 branch commands; language generation preserved navigation
+state. The exact literal/citation and file-write assertions failed. File read,
+restart recall and interruption recovery passed under the original scorer's
+limits. This separates a functioning internal navigation connection from
+unreliable language answers and tool arguments. The retained first attempt had
+stopped after 10 assertions because the Python installer reapplied creation-time
+coherence to native triangles whose centroids had changed.
+
+The repaired internal native mixed-memory sequence completed 14/14 with verified
+compiled navigation in all 31 completed rounds and 79 branch commands. Automatic
+hybrid recall also remained available, so these answers cannot be attributed
+exclusively to the gated triangle excerpts. Both completed sequences are single
+runs at the host's minimum temperature of 0.1; differences from the historical
+scores do not establish a statistically reliable improvement.
+
+Internal triangle-only boundaries remained 1/2. Separate explicit recall passed
+both boundaries and the literal for 3/3, without replacing the automatic
+failures. Across these five conditions, all 70 completed rounds passed the gate,
+with 210 associated bank executions and 146 branch commands. Six additional
+banks executed before two interrupted requests were stopped and are excluded
+from those totals. A log-parsing audit corrected execution accounting without
+changing inference or behavioral scores. The literal recall condition
+used only leaf banks. A full-agent resident-bank fault returned an invalid trace
+and was rejected before language completion, with zero accepted completions;
+the original bank bytes were restored exactly. The
+[aggregate evidence](../evidence/internal-context-20261103.json) preserves these
+checks, the earlier incomplete attempt and resource measurements. This supports
+the internal execution and failure gate, while source selection, grounding and
+answer/tool reliability remain separate limitations.
 
 ## Host grounding defect
 
@@ -195,8 +261,8 @@ counters do not account for every shared-cache or driver allocation.
 
 The tested controller is bounded, externally installed and host-routed. The
 source store remains necessary. Source selection, exact-value grounding,
-autonomous tool choice, numerical stability and the unfinished native-to-internal
-handoff limit what can be inferred. This snapshot documents those limits without
+autonomous tool choice, numerical stability and bounded native-to-internal
+handoff coverage limit what can be inferred. This snapshot documents those limits without
 promising later development. Pinned inputs and commands are in
 [reproduction](reproduction.md); aggregate measurements are in
 [evidence](../evidence/provenance.json).

@@ -15,10 +15,21 @@ Python, Node.js, npm, or separate web server to install.
 The optional [local triangle-model integration](docs/triangle-model.md) adds a
 Rust-managed Python backend to normal terminal/web chat, with native memory
 tools, grounding and durable transcript recovery. Compiled memory navigation is
-available through the separate diagnostic command; its bounded normal-chat
-handoff is unfinished in this snapshot. The model/provider connection and native
-memory retrieval are operational. The [known NLI validation bug](docs/known-limitations.md)
-is reported upstream and remains a disclosed limitation.
+available through both the separate diagnostic command and the opt-in
+`--triangle-internal-context` chat mode. The latter requires verified compiled
+navigation before releasing native-selected triangle excerpts to generation;
+default chat retains an empty navigator forest. Native ranking, compaction and
+source storage remain host-owned, and selected closures exceeding 64 records or
+depth eight fail explicitly. There is no automatic paging.
+
+The November 3, 2026 [internal-context validation](../docs/internal-context-validation.md)
+records mixed-memory 14/14, triangle-only 12/14, boundary 1/2 and separately
+assisted recall 3/3. All 70 completed model rounds passed the compiled source
+gate; an actual zero-bank full-chat control was rejected before completion.
+The 83 focused CPU checks and Intel Arc Pro B70 runs are separate from the
+historical upstream platform and release checks below. The
+[known NLI validation bug](docs/known-limitations.md) remains deferred; successful
+navigation does not establish correct answers or exact source recovery.
 
 This source distribution has separate runtime requirements and uses existing
 local model artifacts. Standard upstream binary releases described below do not

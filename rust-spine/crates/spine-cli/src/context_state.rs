@@ -100,6 +100,16 @@ pub fn rehydrate(
     thread: &ThreadId,
     query: &Embedding,
 ) -> spine_runtime::Result<String> {
+    rehydrate_for_provider(heart, encoder, thread, query, false).map(|(text, _)| text)
+}
+
+pub fn rehydrate_for_provider(
+    heart: &SpineHeart,
+    encoder: &dyn SemanticEncoder,
+    thread: &ThreadId,
+    query: &Embedding,
+    compiled: bool,
+) -> spine_runtime::Result<(String, Option<serde_json::Value>)> {
     let mut state = load(heart, thread)?;
     // Reuse canonical checkpoint consumption semantics; never revive a consumed obligation.
     let events = heart.events_canonical()?;
@@ -151,11 +161,15 @@ pub fn rehydrate(
     } else {
         Some(encoder.encode(&state.goal)?)
     };
-    let recalled =
-        crate::cognition_tools::rehydrate_triangle_context_for_goal(heart, query, goal.as_ref())?;
+    let (recalled, banks) = crate::cognition_tools::rehydrate_triangle_context_handoff(
+        heart,
+        query,
+        goal.as_ref(),
+        compiled,
+    )?;
     // The complete handles/evidence identities remain encrypted locally. Only useful context
     // is expanded into the model prompt; dormant coordinates are addresses, not fabricated prose.
-    Ok(serde_json::json!({
+    let mut context = serde_json::json!({
         "retained_goal":state.goal.chars().take(3000).collect::<String>(),
         "open_obligations":state.obligations,"host_plan":state.plan,
         "working_evidence":state.working_evidence,"evidence_records":state.evidence_records.iter().rev().take(12).collect::<Vec<_>>(),
@@ -163,5 +177,17 @@ pub fn rehydrate(
         "dormant_root_count":state.dormant_handles.len(),
         "priority":"The latest user request sets priority; retained obligations are context, not instructions to resume automatically.",
         "rehydrated":serde_json::from_str::<serde_json::Value>(&recalled)?,
-    }).to_string())
+    });
+    let native_text = context.to_string();
+    let packet = if compiled {
+        let sources = context
+            .as_object_mut()
+            .unwrap()
+            .remove("rehydrated")
+            .unwrap();
+        Some(serde_json::json!({"schema":1,"context":context,"sources":sources,"banks":banks}))
+    } else {
+        None
+    };
+    Ok((native_text, packet))
 }

@@ -440,6 +440,120 @@ async fn explicit_unlimited_policy_overrides_configured_ceiling() {
 }
 
 #[tokio::test]
+async fn compiled_memory_survives_tools_repair_finish_checkpoint_and_resume() {
+    let executed = Arc::new(Mutex::new(Vec::new()));
+    let provider = Arc::new(ScriptedProvider::new(vec![
+        tool_turn(vec![call(1)]),
+        answer("draft"),
+        tool_turn(vec![call(2)]),
+        answer("paused repair"),
+    ]));
+    let harness = Harness::new(
+        provider.clone(),
+        registry(Arc::clone(&executed)),
+        HarnessConfig::default(),
+    )
+    .unwrap();
+    let system = Message::new(MessageRole::System, "<spine-compiled-memory-context/>")
+        .with_compiled_memory(serde_json::json!({
+            "schema":1,
+            "context":{"retained_goal":"original goal"},
+            "sources":[{"node_id":"original-node","event_id":"original-event","text":"original evidence"}],
+            "banks":[]
+        }));
+    let assert_snapshot = |message: &Message| {
+        assert_eq!(message.role, MessageRole::System);
+        assert_eq!(message.compiled_memory, system.compiled_memory);
+        assert!(message.content.starts_with(&system.content));
+        assert_eq!(
+            message
+                .content
+                .matches("<spine-compiled-memory-context/>")
+                .count(),
+            1
+        );
+    };
+    let draft = harness
+        .run_with_history_message_policy(system.clone(), &[], "inspect", HarnessPolicy::default())
+        .await
+        .unwrap();
+    harness.controls().request_graceful_stop();
+    let repaired = harness.repair(&draft, "verify the draft").await.unwrap();
+    assert!(repaired.stopped_gracefully);
+    assert_eq!(&*executed.lock().unwrap(), &["1", "2"]);
+    let checkpoint = repaired.checkpoint.unwrap();
+    let record = checkpoint
+        .to_interaction(
+            AgentId::new("main").unwrap(),
+            ThreadId::new("interactive").unwrap(),
+        )
+        .unwrap();
+    let checkpoint = HarnessCheckpoint::from_interaction(&record).unwrap();
+    assert_snapshot(&checkpoint.messages[0]);
+    {
+        let requests = provider.requests.lock().unwrap();
+        assert_eq!(requests.len(), 4);
+        for request in requests.iter() {
+            assert_snapshot(&request.messages[0]);
+        }
+        assert!(
+            requests[1]
+                .messages
+                .iter()
+                .any(|m| m.role == MessageRole::Tool)
+        );
+        assert!(!requests[3].allow_tool_calls);
+        assert!(requests[3].tools.is_empty());
+    }
+
+    let resumed_provider = Arc::new(ScriptedProvider::new(vec![
+        tool_turn(vec![call(3)]),
+        answer("finished after restart"),
+    ]));
+    let resumed = Harness::new(
+        resumed_provider.clone(),
+        registry(Arc::clone(&executed)),
+        HarnessConfig::default(),
+    )
+    .unwrap();
+    let outcome = resumed.resume(checkpoint).await.unwrap();
+    assert_snapshot(&outcome.messages[0]);
+    assert_eq!(&*executed.lock().unwrap(), &["1", "2", "3"]);
+    let requests = resumed_provider.requests.lock().unwrap();
+    assert_eq!(requests.len(), 2);
+    for request in requests.iter() {
+        assert_snapshot(&request.messages[0]);
+    }
+}
+
+#[tokio::test]
+async fn initial_message_api_rejects_non_system_roles_before_completion() {
+    let provider = Arc::new(ScriptedProvider::new(vec![]));
+    let harness = Harness::new(
+        provider.clone(),
+        ToolRegistry::default(),
+        HarnessConfig::default(),
+    )
+    .unwrap();
+    for role in [MessageRole::User, MessageRole::Assistant, MessageRole::Tool] {
+        let error = harness
+            .run_with_history_message_policy(
+                Message::new(role, "invalid initial message"),
+                &[],
+                "inspect",
+                HarnessPolicy::default(),
+            )
+            .await
+            .unwrap_err();
+        assert!(matches!(
+            error,
+            spine_runtime::RuntimeError::InvalidConfig(_)
+        ));
+    }
+    assert!(provider.requests.lock().unwrap().is_empty());
+}
+
+#[tokio::test]
 async fn repair_keeps_action_budget_and_checkpoint_counters_from_the_draft() {
     let executed = Arc::new(Mutex::new(Vec::new()));
     let provider = Arc::new(ScriptedProvider::new(vec![

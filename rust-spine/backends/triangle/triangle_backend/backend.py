@@ -91,7 +91,11 @@ class Backend:
                 token = protocol.command(command)
             except ValueError as error:
                 raise BackendError("invalid_command", str(error)) from error
-            return {"trace": self._runner().execute(token), "forest_sha256": self.forest.digest}
+            runner = self._runner()
+            before = runner.execution_snapshot()
+            trace = runner.execute(token)
+            return {"trace": trace, "forest_sha256": self.forest.digest,
+                "execution": runner.execution_attestation(before)}
         if op in ("save", "restore"):
             expect_keys(args, ("forest_sha256", "path"))
             self._revision(args)

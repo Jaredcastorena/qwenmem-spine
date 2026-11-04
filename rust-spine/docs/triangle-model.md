@@ -4,15 +4,32 @@ For the complete setup, use the snapshot's [reproduction guide](../../docs/repro
 The direct commands below assume you have entered the included `rust-spine/`
 directory from the repository root (`cd rust-spine`).
 
-The local triangle provider runs through normal `spine chat`, including terminal and browser input, the tool registry, host policy, encrypted transcript journal, grounding, context compaction and operator controls. Rust owns the heart and selects memory. A persistent Rust-owned Python process runs the merged Qwen3.5 checkpoint. This remains a Python-backed inference implementation. The current normal-chat path is a native-harness control: it installs an empty navigation forest and consumes only the harness's messages. Compiled navigation is still exercised by the separate `spine triangle` diagnostic; it is not currently active in normal chat.
+The local triangle provider runs through normal `spine chat`, including terminal and browser input, the tool registry, host policy, encrypted transcript journal, grounding, context compaction and operator controls. Rust owns the heart and selects memory. A persistent Rust-owned Python process runs the merged Qwen3.5 checkpoint. This remains a Python-backed inference implementation. Default chat installs an empty navigation forest and consumes the harness's messages. The opt-in `--triangle-internal-context` path installs bounded native-selected topology and requires verified compiled navigation before releasing its original source excerpts to language generation. The separate `spine triangle` diagnostic remains available.
 
 The actual checkpoint is connected to the normal harness: native memory recall,
 file tools, heart restart and interruption recovery have been exercised. The
-native mixed-memory acceptance sequence passes 14/14 checks, and explicit memory
+historical empty-forest native mixed-memory acceptance sequence passed 14/14 checks, and explicit memory
 recall recovers the tested omitted source values with their citations. The known
 NLI extraction bug is a host validation limitation; it does not imply that the
-provider or memory-tool connection failed. The separate internal-navigation
-handoff remains unfinished as described below.
+provider or memory-tool connection failed. Internal-context validation is
+[recorded separately](../../docs/internal-context-validation.md); those historical
+scores are not evidence for active compiled navigation in chat.
+
+The repaired internal triangle-only sequence completed 12/14 assertions with
+verified compiled navigation in all 27 completed model rounds. File read,
+restart recall and interruption recovery passed; literal/citation fabrication
+and a denied file write to an incorrect absolute path remain failures. These
+results use the original scorer's limits described in the validation record.
+The repaired internal mixed-memory sequence completed 14/14 with verified
+navigation in all 31 completed rounds. Automatic hybrid recall remains available
+in that mode; only the triangle excerpts pass through the compiled source gate.
+These single runs use the host's minimum temperature of 0.1.
+Internal triangle-only boundaries scored 1/2; separately instructed recall
+recovered both boundaries and the literal for 3/3. All 70 completed model rounds
+passed the gate. A separate full-agent resident-bank fault stopped before
+language completion, with no accepted completion. See the
+[aggregate evidence](../../evidence/internal-context-20261103.json) for all
+completed conditions, the leaf-only literal probe and retained failed attempts.
 
 ## Required artifacts
 
@@ -55,6 +72,13 @@ before launch. They are not bundled into this source distribution. The automatic
 dependency setup used by standard Spine does not install this optional backend's
 large checkpoint or compiler.
 
+Add `--triangle-internal-context` to the chat command to require the internal
+source gate. It requires `--triangle-backend`, already present above. Add
+`--triangle-context-only` as a separate option to withhold automatic hybrid recall;
+explicit memory tools remain available. The root
+[reproduction guide](../../docs/reproduction.md#internal-context-acceptance)
+provides guarded interactive and acceptance commands.
+
 ## Retrieval and model ownership
 
 Native triangle compaction is recursive. A parent stores a real apex node and two
@@ -80,12 +104,46 @@ Triangle-only mode adds the displayed triangle source texts to grounding evidenc
 The baseline claim extractor can miss arbitrary string claims, and a repair can
 answer the wrong question: grounding is not a guarantee of successful recovery.
 
-The standalone diagnostic still flattens a forest into 64 resident slots and
-checks host-selected commands against independent traces. That limit is not a
-native cap on retained history. The next internal-controller handoff must accept
-bounded views selected by the harness, preserve dormant handles and revisions,
-and be tested separately. Whole-heart export and provider-owned source scanning
-have been removed from normal chat; their earlier results are historical.
+The standalone diagnostic flattens a forest into 64 resident slots and checks
+host-selected commands against independent traces. That limit is not a native
+cap on retained history. Whole-heart export and provider-owned source scanning
+have been removed from chat; their earlier results are historical.
+
+Native Rust applies the coherence threshold when creating a triangle. Existing
+triangles may survive centroid changes, so the native backend validates retained
+topology, provenance, vector dimensions and finite nonzero norms without
+reapplying the creation-time cosine threshold. The standalone research loader
+keeps its own coherence checks. This distinction was corrected after the first
+internal-context application attempt exposed an installation mismatch.
+
+### Internal context source gate
+
+`--triangle-internal-context` retains the native selection and excerpt budgets
+above. For each selected root it exports the complete original closure, including
+real apex nodes and both branches, into a bank of at most 64 combined
+node/triangle records and depth eight. Topology has no source bodies. Oversized
+closures fail explicitly; the exporter does not invent leaves or silently fall
+back to native prompt context. Multiple bounded banks are separate host-managed
+installations, not in-model paging.
+
+A system-message sidecar carries the native context and original selected source
+rows separately from language text. Main-turn snapshots survive tool,
+repair/finish and harness-checkpoint paths. Auxiliary child requests refresh their
+native context from task and recent tool output, without a main retained goal;
+onboarding sends an explicit empty packet to retain its no-recall policy.
+
+Every completion replays its own packet through the checkpoint's five compiled
+layers. Rust independently checks address order, forest identity, exact integer
+traces and prefix execution evidence. Actual returned apex IDs must authorize
+all originally selected source rows before those excerpts enter the language
+prompt. A failed check stops generation. An empty packet is labeled `no_memory`
+and supplies no navigation-success evidence. No provider-owned cross-request
+context store is used.
+
+The backend records advancing command ticks and navigation-state digests; text
+generation must preserve them. Correct traversal does not verify source
+entailment or language-answer correctness. Ranking, triangle creation,
+compaction and source storage remain native host operations.
 
 Each completion uses a fresh, fixed-capacity language cache. Prefill processes 256 tokens at a time; XPU operations synchronize at chunk boundaries, recurrent chunk outputs and logits are checked for finite values, and language generation must leave navigation tensors unchanged. There is no automatic raw full-history cache restoration during chat. Process restart loads the merged weight checkpoint and reopens the heart; the native harness rebuilds its bounded context from durable evidence.
 

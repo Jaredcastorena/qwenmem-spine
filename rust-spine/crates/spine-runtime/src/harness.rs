@@ -609,9 +609,31 @@ impl Harness {
         task: impl Into<String>,
         policy: HarnessPolicy,
     ) -> Result<RunOutcome> {
+        self.run_with_history_message_policy(
+            Message::new(MessageRole::System, system),
+            history,
+            task,
+            policy,
+        )
+        .await
+    }
+
+    /// Start a run with a host-owned system message, including its durable metadata.
+    pub async fn run_with_history_message_policy(
+        &self,
+        system: Message,
+        history: &[Message],
+        task: impl Into<String>,
+        policy: HarnessPolicy,
+    ) -> Result<RunOutcome> {
+        if system.role != MessageRole::System {
+            return Err(RuntimeError::InvalidConfig(
+                "the initial harness message must have the system role".into(),
+            ));
+        }
         let task = task.into();
         let mut messages = Vec::with_capacity(history.len() + 2);
-        messages.push(Message::new(MessageRole::System, system));
+        messages.push(system);
         messages.extend_from_slice(history);
         messages.push(Message::new(MessageRole::User, task.clone()));
         self.run_messages(messages, task, CompletedWork::default(), None, policy)

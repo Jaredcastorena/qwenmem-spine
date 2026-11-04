@@ -1,0 +1,648 @@
+{
+  "schema": 1,
+  "date_utc": "2026-11-03",
+  "scope": "Local opt-in native-selected compiled-navigation handoff; historical empty-forest results unchanged",
+  "checkpoint_weights_sha256": "ebbcad96c6073c9a2cab13cba4d7414f3ed45117626ae8320fd6092a3210ac35",
+  "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+  "hardware": "Intel Arc Pro B70, XPU; four ranked physical CPU cores 1,5,6,4; RTX 5080 unused",
+  "max_gpu_reserved_bytes": 11905531904,
+  "runs": [
+    {
+      "name": "triangle-only",
+      "evaluation_mode": "unassisted_acceptance",
+      "automatic_memory_mode": "native_triangles_only",
+      "returncode": 1,
+      "seconds": 230.79,
+      "passed": 12,
+      "total": 14,
+      "checks": [
+        {
+          "name": "retention_current",
+          "passed": true
+        },
+        {
+          "name": "retention_exception",
+          "passed": true
+        },
+        {
+          "name": "retention_obligation",
+          "passed": true
+        },
+        {
+          "name": "retention_historical",
+          "passed": true
+        },
+        {
+          "name": "retention_preference",
+          "passed": true
+        },
+        {
+          "name": "retention_literal",
+          "passed": false
+        },
+        {
+          "name": "retention_cancelled",
+          "passed": true
+        },
+        {
+          "name": "retention_unknown",
+          "passed": true
+        },
+        {
+          "name": "real_tool_read",
+          "passed": true
+        },
+        {
+          "name": "real_tool_write",
+          "passed": false
+        },
+        {
+          "name": "session_fact_acknowledged",
+          "passed": true
+        },
+        {
+          "name": "new_process_heart_recall",
+          "passed": true
+        },
+        {
+          "name": "operator_interrupt",
+          "passed": true
+        },
+        {
+          "name": "inference_after_interrupt",
+          "passed": true
+        }
+      ],
+      "navigation": {
+        "completed_model_rounds": 27,
+        "bank_executions": 81,
+        "resident_triangle_installations": 76,
+        "branch_commands": 59,
+        "recorded_bank_executions": 84,
+        "recorded_triangle_installations": 98,
+        "recorded_branch_commands": 65,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 3,
+        "uncompleted_triangle_installations": 22,
+        "uncompleted_branch_commands": 6,
+        "branch_exercised": true,
+        "run_completed": true,
+        "passed": true
+      },
+      "source_heart_sha256": "3f2896baa7d516da2d7a384b26b248cacb1a2cdeffd4dd81b6ac044f6da3af32",
+      "source_heart_unchanged": true,
+      "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+      "fixture_events": 534
+    },
+    {
+      "name": "triangle-boundaries",
+      "evaluation_mode": "unassisted_acceptance",
+      "automatic_memory_mode": "native_triangles_only",
+      "returncode": 1,
+      "seconds": 45.82,
+      "passed": 1,
+      "total": 2,
+      "checks": [
+        {
+          "name": "retention_older_merged_event",
+          "passed": true
+        },
+        {
+          "name": "retention_long_source_tail",
+          "passed": false
+        }
+      ],
+      "navigation": {
+        "completed_model_rounds": 5,
+        "bank_executions": 15,
+        "resident_triangle_installations": 4,
+        "branch_commands": 4,
+        "recorded_bank_executions": 15,
+        "recorded_triangle_installations": 4,
+        "recorded_branch_commands": 4,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 0,
+        "uncompleted_triangle_installations": 0,
+        "uncompleted_branch_commands": 0,
+        "branch_exercised": true,
+        "run_completed": true,
+        "passed": true
+      },
+      "source_heart_sha256": "a6d38cb42d0483b548db73d69dfcecb5e2cad3d0a8ea5e63eea941858c4878bc",
+      "source_heart_unchanged": true,
+      "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+      "fixture_events": 20
+    },
+    {
+      "name": "native-mixed",
+      "evaluation_mode": "unassisted_acceptance",
+      "automatic_memory_mode": "native_default",
+      "returncode": 0,
+      "seconds": 266.84,
+      "passed": 14,
+      "total": 14,
+      "checks": [
+        {
+          "name": "retention_current",
+          "passed": true
+        },
+        {
+          "name": "retention_exception",
+          "passed": true
+        },
+        {
+          "name": "retention_obligation",
+          "passed": true
+        },
+        {
+          "name": "retention_historical",
+          "passed": true
+        },
+        {
+          "name": "retention_preference",
+          "passed": true
+        },
+        {
+          "name": "retention_literal",
+          "passed": true
+        },
+        {
+          "name": "retention_cancelled",
+          "passed": true
+        },
+        {
+          "name": "retention_unknown",
+          "passed": true
+        },
+        {
+          "name": "real_tool_read",
+          "passed": true
+        },
+        {
+          "name": "real_tool_write",
+          "passed": true
+        },
+        {
+          "name": "session_fact_acknowledged",
+          "passed": true
+        },
+        {
+          "name": "new_process_heart_recall",
+          "passed": true
+        },
+        {
+          "name": "operator_interrupt",
+          "passed": true
+        },
+        {
+          "name": "inference_after_interrupt",
+          "passed": true
+        }
+      ],
+      "navigation": {
+        "completed_model_rounds": 31,
+        "bank_executions": 93,
+        "resident_triangle_installations": 183,
+        "branch_commands": 79,
+        "recorded_bank_executions": 96,
+        "recorded_triangle_installations": 210,
+        "recorded_branch_commands": 88,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 3,
+        "uncompleted_triangle_installations": 27,
+        "uncompleted_branch_commands": 9,
+        "branch_exercised": true,
+        "run_completed": true,
+        "passed": true
+      },
+      "source_heart_sha256": "3f2896baa7d516da2d7a384b26b248cacb1a2cdeffd4dd81b6ac044f6da3af32",
+      "source_heart_unchanged": true,
+      "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+      "fixture_events": 534
+    },
+    {
+      "name": "recall-boundaries",
+      "evaluation_mode": "explicit_recall_probe",
+      "automatic_memory_mode": "native_triangles_only",
+      "returncode": 0,
+      "seconds": 44.51,
+      "passed": 2,
+      "total": 2,
+      "checks": [
+        {
+          "name": "retention_older_merged_event",
+          "passed": true
+        },
+        {
+          "name": "retention_long_source_tail",
+          "passed": true
+        }
+      ],
+      "navigation": {
+        "completed_model_rounds": 4,
+        "bank_executions": 12,
+        "resident_triangle_installations": 4,
+        "branch_commands": 4,
+        "recorded_bank_executions": 12,
+        "recorded_triangle_installations": 4,
+        "recorded_branch_commands": 4,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 0,
+        "uncompleted_triangle_installations": 0,
+        "uncompleted_branch_commands": 0,
+        "branch_exercised": true,
+        "run_completed": true,
+        "passed": true
+      },
+      "source_heart_sha256": "a6d38cb42d0483b548db73d69dfcecb5e2cad3d0a8ea5e63eea941858c4878bc",
+      "source_heart_unchanged": true,
+      "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+      "fixture_events": 20
+    },
+    {
+      "name": "recall-literal",
+      "evaluation_mode": "explicit_recall_probe",
+      "automatic_memory_mode": "native_triangles_only",
+      "returncode": 0,
+      "seconds": 40.57,
+      "passed": 1,
+      "total": 1,
+      "checks": [
+        {
+          "name": "retention_literal",
+          "passed": true
+        }
+      ],
+      "navigation": {
+        "completed_model_rounds": 3,
+        "bank_executions": 9,
+        "resident_triangle_installations": 0,
+        "branch_commands": 0,
+        "recorded_bank_executions": 9,
+        "recorded_triangle_installations": 0,
+        "recorded_branch_commands": 0,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 0,
+        "uncompleted_triangle_installations": 0,
+        "uncompleted_branch_commands": 0,
+        "branch_exercised": false,
+        "run_completed": true,
+        "passed": true
+      },
+      "source_heart_sha256": "3f2896baa7d516da2d7a384b26b248cacb1a2cdeffd4dd81b6ac044f6da3af32",
+      "source_heart_unchanged": true,
+      "binary_sha256": "98f40622af4bfdba3671fc49880365e8cebc8f94abc91fe2cfe9d8e8a0d7b5f6",
+      "fixture_events": 534
+    }
+  ],
+  "retained_first_attempts": [
+    {
+      "name": "triangle-only",
+      "returncode": 1,
+      "seconds": 163.92,
+      "checks_passed": 7,
+      "checks_total": 10,
+      "planned_checks": 14,
+      "status": "incomplete_installation_failure",
+      "reported_navigation": {
+        "completed_model_rounds": 24,
+        "bank_executions": 63,
+        "resident_triangle_installations": 97,
+        "branch_commands": 60,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "branch_exercised": true,
+        "passed": true
+      },
+      "navigation_scope": "Completed model rounds only; this early scorer lacked the later full-run-completion gate",
+      "complete_run_verified": false,
+      "audited_navigation": {
+        "completed_model_rounds": 24,
+        "bank_executions": 72,
+        "resident_triangle_installations": 105,
+        "branch_commands": 60,
+        "recorded_bank_executions": 73,
+        "recorded_triangle_installations": 105,
+        "recorded_branch_commands": 60,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 1,
+        "uncompleted_triangle_installations": 0,
+        "uncompleted_branch_commands": 0,
+        "branch_exercised": true,
+        "run_completed": false,
+        "passed": false
+      }
+    },
+    {
+      "name": "triangle-boundaries",
+      "returncode": 1,
+      "seconds": 46.03,
+      "checks_passed": 1,
+      "checks_total": 2,
+      "planned_checks": 2,
+      "status": "completed_boundary_attempt",
+      "reported_navigation": {
+        "completed_model_rounds": 5,
+        "bank_executions": 14,
+        "resident_triangle_installations": 4,
+        "branch_commands": 4,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "branch_exercised": true,
+        "passed": true
+      },
+      "navigation_scope": "Completed model rounds only; this early scorer lacked the later full-run-completion gate",
+      "complete_run_verified": true,
+      "audited_navigation": {
+        "completed_model_rounds": 5,
+        "bank_executions": 15,
+        "resident_triangle_installations": 4,
+        "branch_commands": 4,
+        "recorded_bank_executions": 15,
+        "recorded_triangle_installations": 4,
+        "recorded_branch_commands": 4,
+        "completed_rounds_bound_to_banks": true,
+        "all_completions_gated": true,
+        "all_executions_in_checkpoint": true,
+        "uncompleted_bank_executions": 0,
+        "uncompleted_triangle_installations": 0,
+        "uncompleted_branch_commands": 0,
+        "branch_exercised": true,
+        "run_completed": true,
+        "passed": true
+      }
+    }
+  ],
+  "interrupted_mixed_attempt": "Stopped with the first suite after validator incompatibility; not a completed comparison",
+  "resident_bank_causal": {
+    "event": "resident_bank_causal_probe",
+    "slot": 19,
+    "runner_type": "MergedRunner",
+    "weights_sha256": "ebbcad96c6073c9a2cab13cba4d7414f3ed45117626ae8320fd6092a3210ac35",
+    "pristine": {
+      "trace": [
+        19,
+        195,
+        267
+      ],
+      "execution": {
+        "engine": "merged_checkpoint_prefix",
+        "prefix_layers": 5,
+        "ticks_before": 1,
+        "ticks_after": 3,
+        "state_before": "2f3a0cb64f319dc2f131d932b5b63ea80e3682f4a23478018d42ee78cc9a16dd",
+        "state_after": "4c835aa9a9f29d53a39469c48d958b6675f3bcafa62293149d06e16a260f9cdd",
+        "resident_records": 20,
+        "resident_triangles": 1
+      }
+    },
+    "ablated": {
+      "trace": [
+        19,
+        268
+      ],
+      "execution": {
+        "engine": "merged_checkpoint_prefix",
+        "prefix_layers": 5,
+        "ticks_before": 3,
+        "ticks_after": 4,
+        "state_before": "a1fa6551ed40f85c2501a5f05efeb6d4f402a7141c0ab1d3bc8d21950797a986",
+        "state_after": "dd76c3bbd1693151530dfd62f779e1936c2d6865eded9d0f36a1ac6a082836a5",
+        "resident_records": 20,
+        "resident_triangles": 1
+      }
+    },
+    "recovered": {
+      "trace": [
+        19,
+        195,
+        267
+      ],
+      "execution": {
+        "engine": "merged_checkpoint_prefix",
+        "prefix_layers": 5,
+        "ticks_before": 4,
+        "ticks_after": 6,
+        "state_before": "1b7fad272b517d80b2f7dd121ca869841e129ca6c7f55e8e7e67065eb8e5d3d0",
+        "state_after": "a3aaea212f09b996010b3697103d7e619d31233d40e84c27243ec5f2e7bca06b",
+        "resident_records": 20,
+        "resident_triangles": 1
+      }
+    },
+    "fault": {
+      "resident_before": "5a1c5a9cf3878e05b9fb8a6b45fb5b69ad5f1d6ccf2b683f44d498f52dc46189",
+      "shape": [
+        1,
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "device": "xpu:0",
+      "resident_ablated": "a307ff2e579f4c72a945edebee6a8020a8522a67db6960f796d085e1590c4699",
+      "resident_restored": "5a1c5a9cf3878e05b9fb8a6b45fb5b69ad5f1d6ccf2b683f44d498f52dc46189",
+      "restoration_exact": true
+    },
+    "expected_ablation": true,
+    "recovery_exact": true,
+    "checkpoint_write_performed": false,
+    "native_branch_probes": [
+      {
+        "side": "left",
+        "trace": [
+          265,
+          144,
+          67,
+          195,
+          267
+        ],
+        "expected": [
+          265,
+          144,
+          67,
+          195,
+          267
+        ],
+        "execution": {
+          "engine": "merged_checkpoint_prefix",
+          "prefix_layers": 5,
+          "ticks_before": 8,
+          "ticks_after": 12,
+          "state_before": "97cda9f0a2a49f0a396de9dcfbf327b67a6c495b9a407940c8379477ba24cf2f",
+          "state_after": "70f641522b7b1fbeafee14e628e7ea6a986dfbfb36310c0c5d5b0ba18384ffab",
+          "resident_records": 20,
+          "resident_triangles": 1
+        }
+      },
+      {
+        "side": "right",
+        "trace": [
+          266,
+          131,
+          80,
+          208,
+          267
+        ],
+        "expected": [
+          266,
+          131,
+          80,
+          208,
+          267
+        ],
+        "execution": {
+          "engine": "merged_checkpoint_prefix",
+          "prefix_layers": 5,
+          "ticks_before": 14,
+          "ticks_after": 18,
+          "state_before": "cacc57d6f5bf8775b1b1d378719261768bccbf8276e4a7c9ec2eb154b16c20e8",
+          "state_after": "0a90aaae76944e42f83cf6e3142d6e8fc9e81ffe27d8df6a95da207e5c02c0f0",
+          "resident_records": 20,
+          "resident_triangles": 1
+        }
+      }
+    ],
+    "forest_sha256": "f2b7469df2d2cb2c64b4bf473d39530e758c9fa451adf6d2a3cbf9a00beb5f19",
+    "passed": true
+  },
+  "full_chat_negative_control": {
+    "returncode": 1,
+    "invalid_trace": true,
+    "record_bank_restored": true,
+    "completion_called": false,
+    "accepted_completions": 0,
+    "provider_rejected_trace": true,
+    "source_heart_unchanged": true,
+    "passed": true
+  },
+  "guards": [
+    {
+      "initial_available_bytes": 53863415808,
+      "memory_max_bytes": 25769803776,
+      "memory_high_bytes": 21474836480,
+      "swap_max_bytes": 0,
+      "reserve_bytes": 17179869184,
+      "returncode": 0,
+      "minimum_available_bytes": 51048783872,
+      "stop_reason": null,
+      "cgroup_peak_bytes": 3630141440,
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n"
+    },
+    {
+      "initial_available_bytes": 53844058112,
+      "memory_max_bytes": 25769803776,
+      "memory_high_bytes": 21474836480,
+      "swap_max_bytes": 0,
+      "reserve_bytes": 17179869184,
+      "returncode": -15,
+      "minimum_available_bytes": 49702309888,
+      "stop_reason": null,
+      "cgroup_peak_bytes": 4567703552,
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n"
+    },
+    {
+      "initial_available_bytes": 53857255424,
+      "memory_max_bytes": 25769803776,
+      "memory_high_bytes": 21474836480,
+      "swap_max_bytes": 0,
+      "reserve_bytes": 17179869184,
+      "returncode": 0,
+      "minimum_available_bytes": 49444007936,
+      "stop_reason": null,
+      "cgroup_peak_bytes": 4141289472,
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n"
+    }
+  ],
+  "cpu_checks": {
+    "backend": 24,
+    "cli_triangle": 26,
+    "runtime_message_serialization": 1,
+    "runtime_lifecycle": 28,
+    "auxiliary_child_onboarding_and_regressions": 4,
+    "note": "One new lifecycle assertion initially compared whole host-mutated message; test assertion corrected, sidecar invariant passed. Original failure retained locally."
+  },
+  "limitations": [
+    "One synthetic run per condition; sampling temperature0.1; no population accuracy claim",
+    "Main sidecar persistence through actual checkpoints is CPU-tested; GPU interruption check asks a new question",
+    "Restart citation assertion checks64-hex formatting, not original-event identity",
+    "Host retains semantic ranking, compaction and source bodies; selected complete closures above64records/depth8 fail explicitly",
+    "Known NLI zero-claim extraction issue #40 unchanged; no clean-machine or other accelerator validation"
+  ],
+  "source_files_sha256": {
+    "rust-spine/backends/triangle/triangle_backend/__init__.py": "8c617fcfc99c83db7720b3243580062d422154c8c0d6b20d186f073ac7508a1f",
+    "rust-spine/backends/triangle/triangle_backend/backend.py": "82e8d3ad1f7fb17df736879bdab81798ef7d68829df367d5a3f7c7d769db0e00",
+    "rust-spine/backends/triangle/triangle_backend/chat_cache.py": "622d5cca27fcd61983a8728aeade355821cebfde2edb10ba9b20fa53438925ae",
+    "rust-spine/backends/triangle/triangle_backend/circuit.py": "363b83203160a7090518c65499b90a01eb251c4342e83285dacd11c243f1b7b4",
+    "rust-spine/backends/triangle/triangle_backend/forest.py": "5528b42fdbb2a23620aebf370d4171f8127f17d1f9269f7cc80f734a109a20e9",
+    "rust-spine/backends/triangle/triangle_backend/limits.py": "d260bc0f2bc7257ca07494e52cc3ee06e49aae9866fcbe508807f844d6f1e443",
+    "rust-spine/backends/triangle/triangle_backend/merged.py": "000d2f6c1ef5b84166d905f2b2466a26c1f60062b9da88c7eec881641edc4d76",
+    "rust-spine/backends/triangle/triangle_backend/protocol.py": "1e07afcc1a9202d233badaa835f2d387f48379d3880a55e2a33232452d65dc8b",
+    "rust-spine/backends/triangle/triangle_backend/session.py": "021b35d165bf0b1307df9c7f4ffd4bd206a17543848fe9a5b2f2e6487e5d7148",
+    "rust-spine/backends/triangle/triangle_backend/upstream.py": "9120590f5a91b57464af42add986e939b869d8211ac072b9acbac4114ce8b509",
+    "rust-spine/crates/spine-cli/src/agent_tools.rs": "928f2b544117cf0cd69a8e8dd1cea7f04de60d86188e1566e3d160e2a70e4d61",
+    "rust-spine/crates/spine-cli/src/cognition_tools.rs": "92c37d3ada93fdb59a8c91c7f1c94cc58142e96f99197280584a7e6e72737f17",
+    "rust-spine/crates/spine-cli/src/context_state.rs": "b4771d1dae43f9940bc9df86307291d5eb5b173837ed3aaeac2815972b84bffa",
+    "rust-spine/crates/spine-cli/src/main.rs": "ea35a9df8740fbeb9fc1a95dff9430c3220d816d7b563abb23b68781590ee311",
+    "rust-spine/crates/spine-cli/src/onboarding.rs": "789f33bd68b21d2086a4282d34c45903f394a826f3a0404d52287b47edc20d65",
+    "rust-spine/crates/spine-cli/src/triangle_backend.rs": "c9007aacc6be7c66b4bd3acd13f26b20396307960f4878b81b9b0c4ec4ee27dd",
+    "rust-spine/crates/spine-cli/src/triangle_cli.rs": "6ef3734ad57bd37cc300b43a0d99dc1f24500dd9579b33a7a918d4820ad7768a",
+    "rust-spine/crates/spine-cli/src/triangle_context.rs": "c22f068d25e70b12c036e39daf570fb78edc001a0b05d961a1a507c4e5b6bb6b",
+    "rust-spine/crates/spine-cli/src/triangle_provider.rs": "fc5d6613386f005687aa93376417d6d4cc2a8d16bdd2116676df81690c93d495",
+    "rust-spine/crates/spine-runtime/src/harness.rs": "86c484347b7904b918ff39c0a09ca20ba546ca473a6934b09333c518495b4db7",
+    "rust-spine/crates/spine-runtime/src/provider.rs": "fb1a9b5b346e49783bf8196e52a092de236e27eb4d8c3de9a64b27802a3b8a18",
+    "scripts/spine_end_to_end.py": "060b6b2e7767e3f267eabb66ceef0496c5f88f8ec196589f01b8f3cb1338431e"
+  },
+  "reporting_correction": {
+    "utc": "2026-11-03T20:09:20.050985+00:00",
+    "explanation": "Corrected terminal you> prefixes in bank logs; canonical counts use completed-chat bank groups. Interrupted requests reported separately. Original reports/logs retained unchanged; no inference rerun.",
+    "driver_sha256_during_inference": "060b6b2e7767e3f267eabb66ceef0496c5f88f8ec196589f01b8f3cb1338431e",
+    "corrected_reporting_driver_sha256": "8ce98e0315d48a3ed442e1ee0080c7c7e637666b7c24cc07ce58a73bfbecb5a3",
+    "raw_log_and_report_sha256": {
+      "triangle-only": {
+        "original_results_sha256": "042ff3f19ae1ab715a5d4320ff78c7ec3f3c27a8066956a3120835e65acb6d66",
+        "raw_logs_sha256": {
+          "first.log": "a7d170b3426e202c6345ff8471e2633004709313b177db0abb9a9e7e4cedf998",
+          "reopened.log": "665748e842137499921925124cd44bed022582d278d10cdcb364776b6da78b65"
+        }
+      },
+      "triangle-boundaries": {
+        "original_results_sha256": "e9f386c3a21b809792256757761c670ddfebc1f14a23350a8d04d18419a0af64",
+        "raw_logs_sha256": {
+          "first.log": "6f204874d353fa836dae8fecb5bff3021b8e670f49e4bd4749a2c4c6bd4ef2f1"
+        }
+      },
+      "native-mixed": {
+        "original_results_sha256": "137fb5946eb63bd143e8dfdcd4a6ff3ca15615c58f6cae96e010476ceacc6548",
+        "raw_logs_sha256": {
+          "first.log": "7b0cca6ed74aae9de8a89fd65382e5d7361fcb2c345b7e53eb5be4ed15e198db",
+          "reopened.log": "9f6687f21ac97475932de131e395d01cbcffe037a67664d250bf19820167f9b5"
+        }
+      },
+      "recall-boundaries": {
+        "original_results_sha256": "724aeba84f88e09a90c432d6d27b66b7cf7b9acff13f5e73155d07a4dee854bb",
+        "raw_logs_sha256": {
+          "first.log": "ae02d11fc3173626414331fbade2d90c80908e6b9ee42cb2f12b04884c750f79"
+        }
+      },
+      "recall-literal": {
+        "original_results_sha256": "bffa4d6828043fdacaf359b2a533171c6f2fe3064e77eaebe66eac10d22466db",
+        "raw_logs_sha256": {
+          "first.log": "a9973d66ae8d35bad519974ad1ef395bf770b8cbd6d303387c3fa34fa5b1527d"
+        }
+      }
+    }
+  },
+  "git_base": "19875de034268d0f9a4901e3581a95ee4a534398",
+  "changes_local_uncommitted": true
+}

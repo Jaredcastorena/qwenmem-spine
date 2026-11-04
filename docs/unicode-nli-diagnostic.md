@@ -6,6 +6,17 @@ historical measurements below; no language-model repair is generated. The host
 defect is tracked in [Rust-spine issue #40](https://github.com/Jaredcastorena/Rust-spine/issues/40)
 and is not fixed in this snapshot.
 
+## November 3 internal-context follow-up
+
+The [internal-context application matrix](internal-context-validation.md) adds
+real compiled navigation to opt-in chat; it does not rerun or replace the NLI
+measurements below. Triangle-only automatic memory scored 12/14 and still
+fabricated the exact literal and citation despite passing its navigation gate.
+Separately instructed recall recovered that literal with its original citation;
+the full assisted set scored 3/3. The zero-claim extraction defect remains
+deferred. Successful traversal authorizes selected source excerpts and cannot
+establish exact-string fidelity or recover omitted evidence by itself.
+
 ## Fixed case and method
 
 The question asks for the exact Zircon recovery label, preserving Unicode, case

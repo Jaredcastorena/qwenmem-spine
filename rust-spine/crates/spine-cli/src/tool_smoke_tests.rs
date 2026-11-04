@@ -1219,6 +1219,8 @@ async fn child_checkins_finish_without_an_extra_model_call_and_retain_transcript
         Some(agent_tools::AgentMemory {
             heart: fixture.heart.clone(),
             encoder,
+            triangle_internal_context: false,
+            triangle_context_only: false,
         }),
     )
     .unwrap();
@@ -1404,6 +1406,8 @@ async fn failed_child_recovers_completed_tools_without_restarting_the_parent() {
         Some(agent_tools::AgentMemory {
             heart: fixture.heart.clone(),
             encoder: Arc::new(TinyEncoder::new()),
+            triangle_internal_context: false,
+            triangle_context_only: false,
         }),
     )
     .unwrap();

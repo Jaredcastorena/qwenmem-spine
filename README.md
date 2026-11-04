@@ -9,10 +9,13 @@ execute a small navigation program over a hierarchy of memory records.
 Original source text stays outside the model, in Spine's encrypted memory store
 (the **heart**) or the standalone tests' source fixtures.
 
-There are two execution paths: standalone tests exercise the compiled navigator;
-normal chat uses Spine's native retrieval and tools with the modified language
-model. **Normal chat does not yet use the compiled navigator.** This repository
-preserves both paths as a fixed research source snapshot.
+Standalone tests exercise the compiled navigator. The first historical chat
+test battery ran without `--triangle-internal-context`, using Spine's native
+retrieval and tools with an empty model navigation forest. The second battery,
+measured November 3, 2026, enabled `--triangle-internal-context`: native-selected
+topology runs through the compiled navigator before the selected source excerpts
+reach language generation. This revision includes that opt-in integration and
+both batteries' evidence. Default chat retains the empty-forest path.
 
 **This snapshot is unmaintained.** No updates, bug fixes, new features,
 compatibility updates or ongoing support are planned. This describes maintenance
@@ -30,29 +33,41 @@ maintenance status of Rust Spine, Qwenputer or Qwen.
 - The normal Rust Spine agent loop, connected to the model through a persistent
   Python process, with native memory tools, file tools, grounding, durable
   transcripts, restart and interruption handling.
+- An opt-in native-selected internal context handoff: complete bounded root
+  topology runs through the checkpoint's compiled prefix, and Rust verifies its
+  exact traces before releasing the original selected source excerpts.
 - Synthetic evaluation builders, scoring/audit code, tests, abstract selector
   proofs and sanitized aggregate [evidence](evidence/provenance.json).
 
-**The current normal-chat path installs an empty internal navigation forest.**
-It uses Spine's native context and memory tools. The standalone compiled
-navigator works, but a bounded native-selected handoff to that navigator is
-unfinished. Triangle creation, semantic ranking and compaction remain host
-operations. This is not a full internal triangle implementation or a claim of
-unlimited, lossless context.
+**Default chat still installs an empty internal navigation forest.** Internal
+context is an explicit option, with a separate
+[validation record](docs/internal-context-validation.md). Each installed bank
+contains a selected root's complete original topology, bounded to 64 records and
+depth eight; source bodies stay on the host. Triangle creation, semantic ranking
+and compaction remain host operations. This is not a full internal triangle
+implementation or a claim of unlimited, lossless context.
 
 ## Measured results
 
 | Evaluation | Recorded result | Scope |
 | --- | --- | --- |
-| Current native mixed-memory application | 14/14 operational assertions | Actual checkpoint, real Rust harness, tools, restart and interruption. |
-| Current triangle-only automatic memory | 11/14 | Three failures retained; explicit memory tools remain available. |
-| Separate explicitly requested native recall | 3/3 | Two boundary cases and one Unicode literal; assisted probes, not replacement scores. |
+| Internal native mixed-memory application | 14/14 operational assertions | Verified compiled navigation in all 31 completed rounds; native hybrid evidence also available. |
+| Internal triangle-only automatic memory | 12/14 operational assertions | Verified compiled navigation in all 27 completed model rounds; literal/citation and file-write failures retained. |
+| Internal triangle-only boundaries | 1/2 | Older event recovered; long-source-tail value missed despite verified navigation. |
+| Internal explicitly requested native recall | 3/3 | Two boundaries and one literal; assisted probes, with leaf-only navigation in the literal probe. |
+| Historical native mixed-memory application | 14/14 operational assertions | Actual checkpoint and Rust harness; empty navigator forest, tools, restart and interruption. |
+| Historical triangle-only automatic memory | 11/14 | Empty navigator forest; three failures retained; explicit memory tools remain available. |
+| Historical explicitly requested native recall | 3/3 | Two boundary cases and one Unicode literal; assisted probes, not replacement scores. |
 | Earlier standalone retention | 8/8 at each of 4,274, 32,812 and 131,215 stored content tokens | 572–901-token retrieval prompts; two additional source-selection failures. |
 | Valid full-history control | 8/8 at 167,780 input tokens, repeated after cache restore | A separate earlier run developed NaNs; its cause remains unresolved. |
 
+The [November 3 evidence](evidence/internal-context-20261103.json) records verified
+gating in all 70 completed internal-context model rounds across 210 bank
+executions. A separate resident-bank fault caused the full agent to reject
+navigation before language completion.
 The fixed synthetic questions and operational assertions are not population
 accuracy estimates. The full [results and failure record](docs/results.md)
-separate current behavior from earlier provider experiments. The known host
+separate execution modes and earlier provider experiments. The known host
 claim-extraction/grounding bypass is tracked in
 [Rust-spine issue #40](https://github.com/Jaredcastorena/Rust-spine/issues/40);
 this snapshot does not contain a fix.
@@ -84,6 +99,9 @@ After provisioning the environment and model described in that guide:
 
 # Full Rust agent, after building its binary:
 ./scripts/spine-local.sh --terminal
+
+# Require compiled navigation of native-selected context:
+./scripts/spine-local.sh --terminal --triangle-internal-context
 ```
 
 The guarded XPU launcher requires working user-systemd memory controls and the
@@ -94,9 +112,11 @@ available-host-memory reserve. See the guide before running the large controls.
 
 | To understand… | Read |
 | --- | --- |
-| The research question and interpretation | [Technical write-up](docs/writeup.md) |
+| The research question and interpretation | [Technical write-up](docs/writeup.md) and [technical note PDF](papers/qwenmem-spine-technical-note.pdf) |
+| How to rebuild the paper | [Paper source and build instructions](papers/README.md) |
 | Which work happens in Rust, Python or model state | [Architecture and terminology](docs/architecture.md) |
 | What passed, what failed and what each score means | [Results](docs/results.md) |
+| How internal context is gated and validated | [Internal context validation](docs/internal-context-validation.md) |
 | How to set up and run each experiment | [Reproduction](docs/reproduction.md) |
 | The downloadable checkpoint and its required runtime | [Model card](docs/model-card.md) |
 | Where the system remains unreliable | [Known limitations](docs/known-limitations.md) and [Unicode NLI diagnostic](docs/unicode-nli-diagnostic.md) |
@@ -111,6 +131,7 @@ available-host-memory reserve. See the guide before running the large controls.
 | `scripts/`, `tests/`, `proofs/`, `examples/` | Build, evaluation, checks and synthetic fixtures. |
 | `models.lock.json`, `requirements.lock.txt` | Pinned model/compiler inputs and tested Python dependencies. |
 | `evidence/`, `docs/` | Aggregate measurements, provenance and explanation. |
+| `papers/` | Technical note PDF and reproducible paper source. |
 
 New contributions use MIT. Rust Spine retains MIT OR Apache-2.0; Qwenputer and
 adapted compiler/runtime code retain MIT; Qwen base weights retain Apache-2.0.

@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -27,6 +28,7 @@ class FakeRunner:
         self.forest = forest
         self.calls = []
         self.replacements = 0
+        self.ticks = 0
 
     def replace_forest(self, forest):
         self.replacements += 1
@@ -35,7 +37,21 @@ class FakeRunner:
 
     def execute(self, token):
         self.calls.append(token)
+        self.ticks += 1
         return [token, 267]
+
+    def execution_snapshot(self):
+        # Protocol plumbing fixture only; never labels a fake execution as checkpoint work.
+        state = hashlib.sha256(json.dumps(self.calls).encode()).hexdigest()
+        return {"ticks": self.ticks, "state": state}
+
+    def execution_attestation(self, before):
+        after = self.execution_snapshot()
+        return {"engine": "mock", "prefix_layers": 0,
+            "ticks_before": before["ticks"], "ticks_after": after["ticks"],
+            "state_before": before["state"], "state_after": after["state"],
+            "resident_records": len(self.forest.records),
+            "resident_triangles": len(self.forest.data["triangles"])}
 
     def save(self, path):
         self.calls.append(("save", path))
@@ -99,6 +115,20 @@ class ProtocolTests(unittest.TestCase):
         self.assertNotEqual(new_revision, revision)
         self.assertEqual(runner.replacements, 1)
         self.assertEqual(runner.calls, [])
+
+    def test_execute_attestation_tracks_mock_execution_and_installed_bank(self):
+        revision = self.install()
+        first = self.call("execute", forest_sha256=revision, command="open:4")["result"]
+        second = self.call("execute", forest_sha256=revision, command="left")["result"]
+        a, b = first["execution"], second["execution"]
+        self.assertEqual((a["engine"], a["prefix_layers"]), ("mock", 0))
+        self.assertEqual((a["resident_records"], a["resident_triangles"]), (5, 2))
+        self.assertEqual((a["ticks_before"], a["ticks_after"], b["ticks_after"]), (0, 1, 2))
+        self.assertEqual(a["ticks_after"], b["ticks_before"])
+        self.assertEqual(a["state_after"], b["state_before"])
+        self.assertNotEqual(a["state_before"], a["state_after"])
+        self.assertEqual(first["forest_sha256"], revision)
+        self.assertEqual(first["trace"], [4, 267])
 
     def test_invalid_install_preserves_forest_and_session(self):
         revision = self.install()
@@ -202,6 +232,36 @@ class ForestTests(unittest.TestCase):
             mutate(data)
             with self.assertRaises((ValueError, TypeError)):
                 Forest(data)
+
+    def test_retained_native_triangles_accept_evolved_low_cosine_centroids(self):
+        data = sample_forest()
+        original = Forest(data)
+        # Native coherence was checked at construction; later DCMDb centroids
+        # may be orthogonal or opposite while the same topology remains valid.
+        data["nodes"]["b"]["vector"] = [0.0, 1.0]
+        data["nodes"]["c"]["vector"] = [-1.0, 0.0]
+        evolved = Forest(data)
+        self.assertEqual(evolved.addresses, original.addresses)
+        self.assertEqual(evolved.records, original.records)
+        self.assertNotEqual(evolved.digest, original.digest)
+        mutations = {
+            "cycle": lambda d: d["triangles"]["d"].update(left="e"),
+            "dangling branch": lambda d: d["triangles"]["d"].update(left="missing"),
+            "missing apex": lambda d: d["triangles"]["d"].update(apex="missing"),
+            "triangle apex": lambda d: d["triangles"]["e"].update(apex="d"),
+            "duplicate branch": lambda d: d["triangles"]["d"].update(right="a"),
+            "non-string branch": lambda d: d["triangles"]["d"].update(left=0),
+            "dimensions": lambda d: d["nodes"]["b"].update(vector=[1.0]),
+            "zero norm": lambda d: d["nodes"]["b"].update(vector=[0.0, 0.0]),
+            "nonfinite coordinate": lambda d: d["nodes"]["b"].update(vector=[float("inf"), 0.0]),
+            "nonfinite norm": lambda d: d["nodes"]["b"].update(vector=[1e308, 0.0]),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(malformed=name):
+                malformed = copy.deepcopy(data)
+                mutate(malformed)
+                with self.assertRaises((ValueError, TypeError)):
+                    Forest(malformed)
 
     def test_finite_parallel_vectors_avoid_intermediate_norm_overflow(self):
         for magnitude in (1e100, 1e-100):

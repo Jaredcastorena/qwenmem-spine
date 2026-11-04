@@ -17,8 +17,11 @@ not fine-tuned on the evaluation questions. It requires the matching custom
 runtime; ordinary hosted inference widgets and generic generation servers are
 not validated entry points.
 
-Source and instructions:
-[Jaredcastorena/qwenmem-spine](https://github.com/Jaredcastorena/qwenmem-spine).
+Source and instructions: this revision of
+[Jaredcastorena/qwenmem-spine](https://github.com/Jaredcastorena/qwenmem-spine),
+including the opt-in internal-context integration and its November 3 evidence.
+Use the runtime from the same repository revision as this card; historical
+source baseline pins do not include all integration changes.
 Model distribution destination:
 [Jared1728/qwenmem-spine](https://huggingface.co/Jared1728/qwenmem-spine).
 Access to either repository depends on its visibility and account permissions.
@@ -70,17 +73,29 @@ stable IDs and the complete native hierarchy remain in Spine's encrypted heart.
 Rust chooses semantic routes and evidence. In-model triangle creation, folding,
 ranking, paging and autonomous routing are not implemented.
 
-Current normal chat uses native harness messages and tools and installs an
+Default chat uses native harness messages and tools and installs an
 **empty internal navigation forest**. Its provider performs no extra heart scan.
 Native compaction, ranking, automatic hybrid recall and explicit memory tools
 remain active. Optional triangle-only automatic memory withholds hybrid recall
 text while preserving the task, history, retained state and explicit tools.
-The bounded native-selected handoff to the compiled controller is unfinished.
-Standalone compiled-navigation tests are a separate execution path.
 
-Use the source repository's Python backend at
-`rust-spine/backends/triangle/server.py`, pinned compiler and matching checkpoint.
-Follow `docs/reproduction.md` and `rust-spine/docs/triangle-model.md`. Runtime
+The opt-in `--triangle-internal-context` mode installs complete topology for each
+native-selected root, bounded to 64 records and depth eight per bank, with no
+source bodies in that topology. The actual checkpoint's five-layer prefix
+executes navigation commands. Rust independently checks exact traces, installed
+addresses and execution evidence before returned apex IDs authorize the original
+selected excerpts for the language prompt. An oversized closure or failed check
+stops the request. Every completion replays a durable system-message sidecar;
+there is no provider-owned source scan or cross-request context store. Ranking,
+compaction, source storage and source budgets remain native host operations.
+See the source repository's `docs/internal-context-validation.md` for the measured
+scope; standalone navigation is a separate execution path.
+
+Use this repository revision's
+[Python backend](../rust-spine/backends/triangle/server.py), included Rust source,
+pinned compiler and matching checkpoint. Follow the
+[reproduction guide](reproduction.md) and
+[direct runtime instructions](../rust-spine/docs/triangle-model.md). Runtime
 loading uses local files; dependencies must be provisioned first. A generic
 Transformers loader is not an established substitute for the command/text
 dispatch and state-validation contract.
@@ -94,17 +109,38 @@ Weights do not contain a user's heart, conversation or installed forest.
 
 ## Recorded evaluations
 
+The first historical chat battery ran with `--triangle-internal-context` off
+and an empty model navigation forest. The second battery, measured November 3,
+2026, enabled that flag and used the same unchanged model weights. It is included
+in this revision; the flag remains opt-in.
+
 | Evaluation | Result and scope |
 | --- | --- |
-| Current native mixed-memory application | 14/14 operational assertions, including real native/file tools, restart and interruption. |
-| Current triangle-only automatic memory | 11/14; literal fabrication, wrong-question repair and tool-path failure retained. |
-| Current unassisted source boundaries | Native mixed-memory 0/2 because required original citations were omitted; triangle-only 1/2. |
-| Explicitly instructed native recall | 3/3 selected probes: both boundaries and exact Unicode literal, with original citations. Assisted results do not replace failures. |
+| Internal native mixed-memory application | 14/14 operational assertions; all 31 completed rounds used verified compiled navigation, with native hybrid evidence also available. |
+| Internal triangle-only automatic memory | 12/14 operational assertions; all 27 completed model rounds used verified compiled navigation. Literal/citation and file-write failures remain. |
+| Internal triangle-only boundaries | 1/2; older event recovered, long-source-tail value missed despite verified navigation. |
+| Internal explicitly instructed recall | 3/3: both boundaries and the literal, with original citations. The literal probe used leaf-only banks. |
+| Historical native mixed-memory application | 14/14 operational assertions with an empty navigator forest, including real native/file tools, restart and interruption. |
+| Historical triangle-only automatic memory | 11/14 with an empty navigator forest; literal fabrication, wrong-question repair and tool-path failure retained. |
+| Historical unassisted source boundaries | Native mixed-memory 0/2 because required original citations were omitted; triangle-only 1/2. |
+| Historical explicitly instructed native recall | 3/3 selected probes: both boundaries and exact Unicode literal, with original citations. Assisted results do not replace failures. |
 | Earlier compiled-navigation retention | 8/8 at each of 4,274, 32,812 and 131,215 stored content tokens, with 572–901-token evidence prompts. Two extra renderer boundaries failed. |
 | Valid raw-context control | 8/8 at 167,780 input tokens; a fresh process restored the full cache and reproduced answer bytes and token IDs. |
 
 These are small fixed synthetic tests and operational assertions, not general
-accuracy estimates. Current application controls do not exercise active compiled
+accuracy estimates. The internal triangle-only run passed the navigation gate
+while failing two behavioral assertions; navigation is not answer verification.
+The internal mixed mode also supplies native hybrid recall; its answer score
+does not isolate the gated triangle excerpts as the source of success. These
+are single runs with the host's minimum temperature of 0.1.
+All 70 completed internal-context rounds passed the source gate across 210 bank
+executions and preserved navigation state during language generation. A separate
+full-agent resident-bank fault produced an invalid trace and was rejected before
+language completion,
+with zero accepted completions. The [aggregate evidence](../evidence/internal-context-20261103.json)
+records these runs and the independent standalone zero/restore probe.
+
+The historical application controls above do not exercise active compiled
 navigation. Earlier provider trials used an extra source scan that has since
 been removed; their results do not describe current retrieval behavior. Complete
 tables, failure categories and sanitized aggregate evidence are in the source
@@ -146,7 +182,9 @@ guarantees. Source text and dense runtime state still consume storage.
 | --- | --- |
 | `Qwen/Qwen3.5-4B` | `851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a` |
 | `divagr18/qwenputer` | `01cf657d353bdc0c795c2d57a28a3e3f483f20a1` |
-| Rust Spine baseline | `07857378505d2573b623da4f81a892bfb9b5f2cd` plus included integration changes |
+| Integration source and runtime | This repository revision, including the November 3 internal-context implementation and evidence. |
+| Historical Rust Spine baseline | `07857378505d2573b623da4f81a892bfb9b5f2cd`; the included source adds integration changes. |
+| Published merged model weights | `f69dbcfe5a7cebea1c287f6f1d76c8e90b2c9a98` at `Jared1728/qwenmem-spine` (unchanged). |
 | `sentence-transformers/all-MiniLM-L6-v2` | `1110a243fdf4706b3f48f1d95db1a4f5529b4d41` |
 | `cross-encoder/nli-MiniLM2-L6-H768` | `b95119ce93d3e065de6214e38cd4a97b0f2f2c6d` |
 

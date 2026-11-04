@@ -4,6 +4,12 @@ This audit is retained from upstream Rust Spine v0.3.2. Its counts and platform
 claims describe that historical baseline; they do not validate the optional
 qwenmem backend. See the snapshot's [results](../../docs/results.md) for that scope.
 
+The November 3, 2026 [internal-context validation](../../docs/internal-context-validation.md)
+adds 83 focused CPU checks and a separate B70 matrix with 70 completed model
+rounds, all passing the compiled source gate. Its mixed 14/14, triangle-only
+12/14, boundary 1/2 and assisted 3/3 scores describe this opt-in integration.
+They do not rerun or replace the desktop suite and platform audit below.
+
 Scope: the released desktop workspace, starting from v0.3.1 and its test-only
 follow-up. Android and the separate Codex-provider work are outside this change.
 The reference is the Python source supplied with the project, including its

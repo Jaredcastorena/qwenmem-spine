@@ -19,6 +19,7 @@ mod tool_smoke_tests;
 mod transcript;
 mod triangle_backend;
 mod triangle_cli;
+mod triangle_context;
 mod triangle_provider;
 mod web_server;
 
@@ -666,6 +667,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             // Incognito and managed-server runs never change normal launch preferences.
             let local_triangle = triangle.triangle_backend.is_some();
             let triangle_context_only = triangle.triangle_context_only;
+            let triangle_internal_context = triangle.triangle_internal_context;
             let remember = !cli.no_settings && !incognito_mode && !llamacpp && !local_triangle;
             let settings_path = if remember {
                 Some(match cli.config {
@@ -910,6 +912,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Some(agent_tools::AgentMemory {
                     heart: heart.clone(),
                     encoder: encoder.clone(),
+                    triangle_internal_context,
+                    triangle_context_only,
                 }),
             )?;
             let mut harness = Harness::new(
@@ -1035,6 +1039,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         &mut line_receiver,
                         web_ui.as_ref(),
                         status.as_ref(),
+                        triangle_internal_context,
                     )
                     .await?;
                     interaction_profile = result.profile.or(interaction_profile);
@@ -1208,14 +1213,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 continue;
                             }
                         };
-                        let triangle_context = if circuit_breaker
+                        let (triangle_context, compiled_memory) = if circuit_breaker
                             .allow(ResilienceChannel::Dcmdb, Instant::now())
                         {
-                            match context_state::rehydrate(
+                            match context_state::rehydrate_for_provider(
                                 &heart,
                                 encoder.as_ref(),
                                 &thread_id,
                                 &task_embedding,
+                                triangle_internal_context,
                             ) {
                                 Ok(context) => {
                                     circuit_breaker.record_success(ResilienceChannel::Dcmdb);
@@ -1225,11 +1231,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                     circuit_breaker
                                         .record_failure(ResilienceChannel::Dcmdb, Instant::now());
                                     eprintln!("[triangle context unavailable: {error}]");
-                                    "[]".into()
+                                    if triangle_internal_context {
+                                        status.end();
+                                        if let Some(web) = &web_ui {
+                                            web.fail(&format!(
+                                                "Internal triangle handoff unavailable: {error}"
+                                            ));
+                                        }
+                                        continue;
+                                    }
+                                    ("[]".into(), None)
                                 }
                             }
                         } else {
-                            "[]".into()
+                            ("[]".into(), None)
                         };
                         if !circuit_breaker.allow(ResilienceChannel::Dcmdb, Instant::now()) {
                             let notice = "memory circuit opened during recall; turn was not sent";
@@ -1362,8 +1377,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             grounding.is_some(),
                             risk_estimate,
                         )?)?;
+                        let prompt_triangle_context = if compiled_memory.is_some() {
+                            triangle_context::MARKER
+                        } else {
+                            &triangle_context
+                        };
                         let system_prompt = format!(
-                            "{partner_system_prompt}\n\nCurrent committed Thymos proprioception: {feeling}\nCommitted trajectory surprise: {:.3}. Host risk estimate for this memory region: {risk_context}. Host policy is enforced at recall_k={}, temperature={:.3}, action_budget={}, and coverage_threshold={:.3}. At higher or unavailable risk, deepen recall and avoid unsupported certainty.\n\nAutomatically recalled canonical evidence for this turn (it may be irrelevant; verify before using):\n{recalled}\n\nBudgeted triangle-context rehydration:\n{triangle_context}\n\nRunning/recent host tasks:\n{}",
+                            "{partner_system_prompt}\n\nCurrent committed Thymos proprioception: {feeling}\nCommitted trajectory surprise: {:.3}. Host risk estimate for this memory region: {risk_context}. Host policy is enforced at recall_k={}, temperature={:.3}, action_budget={}, and coverage_threshold={:.3}. At higher or unavailable risk, deepen recall and avoid unsupported certainty.\n\nAutomatically recalled canonical evidence for this turn (it may be irrelevant; verify before using):\n{recalled}\n\nBudgeted triangle-context rehydration:\n{prompt_triangle_context}\n\nRunning/recent host tasks:\n{}",
                             user_commit.1.trajectory.surprise,
                             policy.recall_top_k,
                             policy.provider_temperature,
@@ -1376,8 +1396,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             node_id: user_commit.1.node_id,
                             chronology: user_commit.0.event.body.device_sequence,
                         }];
-                        let run = Box::pin(harness.run_with_history_policy(
-                            system_prompt,
+                        let mut system_message = Message::new(MessageRole::System, system_prompt);
+                        system_message.compiled_memory = compiled_memory;
+                        let run = Box::pin(harness.run_with_history_message_policy(
+                            system_message,
                             &history,
                             task,
                             harness_policy,
@@ -2117,6 +2139,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Some(agent_tools::AgentMemory {
                     heart: heart.clone(),
                     encoder: encoder.clone(),
+                    triangle_internal_context: false,
+                    triangle_context_only: false,
                 }),
             )?;
             let mut harness = Harness::new(
@@ -2709,6 +2733,7 @@ async fn run_first_conversation(
     lines: &mut tokio::sync::mpsc::UnboundedReceiver<io::Result<String>>,
     web: Option<&web_server::WebUi>,
     status: &TerminalStatus,
+    triangle_internal_context: bool,
 ) -> Result<FirstConversationResult, Box<dyn std::error::Error>> {
     let waiting_for_answer = state.waiting_for_answer();
     let mut transcript = state.transcript;
@@ -2729,7 +2754,14 @@ async fn run_first_conversation(
             if let Some(web) = web {
                 web.begin_onboarding_model_turn();
             }
-            let turn = match onboarding::generate_turn(provider, &transcript, answer_count).await {
+            let turn = match onboarding::generate_turn_with_internal_context(
+                provider,
+                &transcript,
+                answer_count,
+                triangle_internal_context,
+            )
+            .await
+            {
                 Ok(turn) => turn,
                 Err(error) => {
                     status.end();
